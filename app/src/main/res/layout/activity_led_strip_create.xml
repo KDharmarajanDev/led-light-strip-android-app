@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/create_led_strip_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/design_default_color_primary_dark">
+
+    <Button
+        android:id="@+id/CancelLEDStripButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="71dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/cancel_button"
+        android:text="@android:string/cancel"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CreateLEDStripSequentialGeneratorRecyclerView" />
+
+    <Button
+        android:id="@+id/SaveLEDStripButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="252dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/save_button"
+        android:text="@string/save"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CreateLEDStripSequentialGeneratorRecyclerView" />
+
+    <Button
+        android:id="@+id/AddSequentialGeneratorButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="304dp"
+        android:layout_marginTop="88dp"
+        android:layout_weight="1"
+        android:background="@drawable/round_button_red"
+        android:text="@string/PlusSymbol"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="36sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CreateLEDStripText" />
+
+    <TextView
+        android:id="@+id/BluePinText"
+        android:layout_width="237dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="156dp"
+        android:gravity="start|center_vertical"
+        android:text="@string/blue_pin"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.091"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/BluePinEditText"
+        android:layout_width="58dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="104dp"
+        android:layout_marginEnd="260dp"
+        android:backgroundTint="@color/white"
+        android:inputType="numberSigned"
+        android:maxLines="1"
+        android:text="@string/_0"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/CreateLEDStripText" />
+
+    <TextView
+        android:id="@+id/GreenPinText"
+        android:layout_width="237dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="108dp"
+        android:gravity="start|center_vertical"
+        android:text="@string/green_pin"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.091"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/GreenPinEditText"
+        android:layout_width="58dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="252dp"
+        android:backgroundTint="@color/white"
+        android:inputType="numberSigned"
+        android:maxLines="1"
+        android:text="@string/_0"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/CreateLEDStripText" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/RedPinEditText"
+        android:layout_width="58dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="268dp"
+        android:backgroundTint="@color/white"
+        android:inputType="numberSigned"
+        android:maxLines="1"
+        android:text="@string/_0"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/CreateLEDStripText" />
+
+    <TextView
+        android:id="@+id/RedPinText"
+        android:layout_width="237dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="60dp"
+        android:gravity="start|center_vertical"
+        android:text="@string/red_pin"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.091"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/CreateLEDStripText"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="@string/create_led_strip"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/CreateLEDStripSequentialGeneratorRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="313dp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/BluePinText" />
+</androidx.constraintlayout.widget.ConstraintLayout>

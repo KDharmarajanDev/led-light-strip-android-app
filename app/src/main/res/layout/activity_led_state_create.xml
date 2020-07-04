@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/CreateColorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@drawable/pop_up_drawable"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/StartingColorDisplay"
+        android:layout_width="123dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="144dp"
+        android:layout_marginTop="120dp"
+        android:background="@drawable/color_picker_display"
+        android:contentDescription="@string/shows_the_color"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CreateColorText" />
+
+    <CheckBox
+        android:id="@+id/TransitionLEDStateCheckBox"
+        android:layout_width="200dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="18dp"
+        android:buttonTint="@color/white"
+        android:text="@string/transition_led_state"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CreateColorText" />
+
+    <TextView
+        android:id="@+id/CreateColorText"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="@string/create_led_state"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/DurationText"
+        android:layout_width="237dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="128dp"
+        android:gravity="start|center_vertical"
+        android:text="@string/duration"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.091"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/StartingColorText"
+        android:layout_width="237dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="176dp"
+        android:gravity="start|center_vertical"
+        android:text="@string/starting_color"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.091"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:textColorHint="@color/white"
+        app:hintEnabled="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/DurationValueEditText"
+        android:layout_width="58dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="128dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/white"
+        android:inputType="numberDecimal"
+        android:maxLines="1"
+        android:text="@string/_0"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TransitionLEDStateCheckBox" />
+
+    <TextView
+        android:id="@+id/EndingColorText"
+        android:layout_width="237dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="244dp"
+        android:gravity="start|center_vertical"
+        android:text="@string/ending_color"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.091"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/EndingColorDisplay"
+        android:layout_width="123dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="144dp"
+        android:layout_marginTop="184dp"
+        android:background="@drawable/color_picker_display"
+        android:contentDescription="@string/shows_the_color"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CreateColorText"
+        tools:visibility="invisible" />
+
+    <Button
+        android:id="@+id/SaveLEDStateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/save_button"
+        android:text="@string/save"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toEndOf="@+id/CancelLEDStateButton"
+        app:layout_constraintTop_toBottomOf="@+id/EndingColorText" />
+
+    <Button
+        android:id="@+id/CancelLEDStateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="308dp"
+        android:background="@drawable/cancel_button"
+        android:text="@android:string/cancel"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

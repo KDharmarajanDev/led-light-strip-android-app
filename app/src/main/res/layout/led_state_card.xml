@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LEDStateCard"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/black_border_color_display"
+    app:cardCornerRadius="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="198dp"
+        android:layout_height="107dp">
+
+        <ImageView
+            android:id="@+id/LEDStateColorDisplayImageView"
+            android:layout_width="87dp"
+            android:layout_height="82dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/todo"
+            app:layout_constraintStart_toEndOf="@+id/LEDStateDurationCardText"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/black_border_color_display" />
+
+        <TextView
+            android:id="@+id/LEDStateDurationCardText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:maxLines="10"
+            android:text="@string/duration"
+            android:textColor="#000000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/LEDStateDeleteButton"
+            android:layout_width="27dp"
+            android:layout_height="39dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/ic_delete_black_24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/LEDStateDurationCardText" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

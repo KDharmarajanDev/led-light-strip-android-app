@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/CreateColorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@drawable/pop_up_drawable"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/CreateColorText"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="@string/create_color"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ColorPickerDisplay"
+        android:layout_width="305dp"
+        android:layout_height="71dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/color_picker_display"
+        android:contentDescription="@string/shows_the_color"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CreateColorText" />
+
+    <!--Red Bar-->
+    <SeekBar
+        android:id="@+id/RedSeekBar"
+        android:layout_width="257dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="84dp"
+        android:indeterminate="false"
+        android:max="255"
+        android:maxHeight="2dp"
+        android:minHeight="2dp"
+        android:progress="255"
+        android:progressDrawable="@drawable/red_progress_bar"
+        android:thumbTint="#FFFF0000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ColorPickerDisplay" />
+
+    <TextView
+        android:id="@+id/RedValueText"
+        android:layout_width="44dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/red"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/RedSeekBar"
+        app:layout_constraintTop_toBottomOf="@+id/ColorPickerDisplay" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/white"
+        app:hintEnabled="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/RedSeekBar">
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/RedValueEditText"
+        android:layout_width="58dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="23dp"
+        android:backgroundTint="@color/white"
+        android:inputType="number"
+        android:maxLines="1"
+        android:text="@string/_255"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toEndOf="@+id/RedSeekBar"
+        app:layout_constraintTop_toBottomOf="@+id/ColorPickerDisplay" />
+
+    <!--Green Bar-->
+    <SeekBar
+        android:id="@+id/GreenSeekBar"
+        android:layout_width="257dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="84dp"
+        android:indeterminate="false"
+        android:max="255"
+        android:maxHeight="2dp"
+        android:minHeight="2dp"
+        android:progress="255"
+        android:progressDrawable="@drawable/green_progress_bar"
+        android:thumbTint="#FF00FF00"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ColorPickerDisplay" />
+
+    <TextView
+        android:id="@+id/GreenValueText"
+        android:layout_width="54dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="70dp"
+        android:text="@string/green"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/GreenSeekBar"
+        app:layout_constraintTop_toBottomOf="@+id/ColorPickerDisplay" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:textColorHint="@color/white"
+        app:hintEnabled="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/GreenSeekBar">
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/GreenValueEditText"
+        android:layout_width="58dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="61dp"
+        android:backgroundTint="@color/white"
+        android:inputType="number"
+        android:maxLines="1"
+        android:text="@string/_255"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toEndOf="@+id/GreenSeekBar"
+        app:layout_constraintTop_toBottomOf="@+id/ColorPickerDisplay" />
+
+    <!--Blue Bar-->
+    <SeekBar
+        android:id="@+id/BlueSeekBar"
+        android:layout_width="257dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="108dp"
+        android:layout_marginEnd="84dp"
+        android:indeterminate="false"
+        android:max="255"
+        android:maxHeight="2dp"
+        android:minHeight="2dp"
+        android:progress="255"
+        android:progressDrawable="@drawable/blue_progress_bar"
+        android:thumbTint="#FF0000FF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ColorPickerDisplay" />
+
+    <TextView
+        android:id="@+id/BlueValueText"
+        android:layout_width="45dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="108dp"
+        android:text="@string/blue"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/BlueSeekBar"
+        app:layout_constraintTop_toBottomOf="@+id/ColorPickerDisplay" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:textColorHint="@color/white"
+        app:hintEnabled="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/BlueSeekBar">
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/BlueValueEditText"
+        android:layout_width="58dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="99dp"
+        android:backgroundTint="@color/white"
+        android:inputType="number"
+        android:maxLines="1"
+        android:text="@string/_255"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toEndOf="@+id/BlueSeekBar"
+        app:layout_constraintTop_toBottomOf="@+id/ColorPickerDisplay" />
+
+    <Button
+        android:id="@+id/SaveColorButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="244dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/save_button"
+        android:text="@string/save"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/BlueSeekBar" />
+
+    <Button
+        android:id="@+id/CancelColorButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/cancel_button"
+        android:text="@android:string/cancel"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/BlueSeekBar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

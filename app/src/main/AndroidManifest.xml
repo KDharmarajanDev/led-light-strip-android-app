@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dist="http://schemas.android.com/apk/distribution"
+    package="com.ledlightscheduler">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".ConnectionDebugActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".uimanager.CreateLEDStripPopup"
+            android:theme="@style/AppTheme.OverlayTheme">
+        </activity>
+        <activity
+            android:name=".uimanager.CreateSequentialGeneratorPopup"
+            android:theme="@style/AppTheme.OverlayTheme"></activity>
+        <activity
+            android:name=".uimanager.CreateLEDStatePopup"
+            android:theme="@style/AppTheme.OverlayTheme"></activity>
+        <activity
+            android:name=".uimanager.CreateColorPopup"
+            android:theme="@style/AppTheme.OverlayTheme"></activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+    </application>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+
+    <dist:module dist:instant="true" />
+
+</manifest>
