@@ -55,21 +55,21 @@ public class LEDStateDisplayAdapter extends RecyclerView.Adapter<LEDStateDisplay
                         }
                     }
                 });
-
-                itemView.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View view){
-                        if(listener != null){
-                            int position = getAdapterPosition();
-                            if(position != RecyclerView.NO_POSITION){
-                                listener.onItemClick(position);
-                            }
-                        }
-                    }
-                });
             } else {
                 deleteButton.setVisibility(View.INVISIBLE);
             }
+
+            itemView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view){
+                    if(listener != null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 

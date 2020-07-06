@@ -24,17 +24,20 @@ public class SequentialGenerator implements Parcelable {
     }
 
     public LEDState getCurrentLEDState(){
+        if(states.size() == 0){
+            return new LEDState();
+        }
         return states.get(currentStateIndex);
     }
 
     public LEDState getNextState(){
-        if(currentStateIndex < states.size()){
+        if(currentStateIndex+1 < states.size()){
             currentStateIndex++;
         } else {
             currentStateIndex = 0;
         }
         setStartTime(System.currentTimeMillis());
-        return states.get(currentStateIndex);
+        return getCurrentLEDState();
     }
 
     public int getEndStateIndex(){

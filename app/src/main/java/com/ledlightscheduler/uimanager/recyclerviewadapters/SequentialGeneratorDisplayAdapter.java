@@ -1,11 +1,10 @@
 package com.ledlightscheduler.uimanager.recyclerviewadapters;
 
-import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ledlightscheduler.R;
 import com.ledlightscheduler.ledstriputilities.generators.RandomGenerator;
 import com.ledlightscheduler.ledstriputilities.generators.SequentialGenerator;
-import com.ledlightscheduler.ledstriputilities.ledstates.Color;
 import com.ledlightscheduler.ledstriputilities.ledstrips.SingleColorLEDStrip;
 import com.ledlightscheduler.uimanager.recyclerviewpsacer.HorizontalSpaceItemDecoration;
 
@@ -24,7 +22,9 @@ public class SequentialGeneratorDisplayAdapter extends RecyclerView.Adapter<Sequ
 
     private SingleColorLEDStrip ledStrip;
     private OnItemClickListener listener;
-    private int activeGenerator;
+    private boolean isMutable;
+    private boolean shouldPassListener;
+    private int desiredPosition;
 
     public interface OnItemClickListener {
         void onItemClick(int position);
@@ -41,24 +41,26 @@ public class SequentialGeneratorDisplayAdapter extends RecyclerView.Adapter<Sequ
         private Button activateButton;
         private Button deleteButton;
         private TextView generatorTypeText;
-        private ImageView sequentialGeneratorScheduledColorDisplay;
         private RecyclerView ledStateRecyclerView;
         private LEDStateDisplayAdapter ledStateDisplayViewAdapter;
         private RecyclerView.LayoutManager ledStateDisplayLayoutManager;
 
-        public SequentialGeneratorDisplayViewHolder(View itemView, final OnItemClickListener listener) {
+        public SequentialGeneratorDisplayViewHolder(View itemView, final OnItemClickListener listener, boolean isMutable) {
             super(itemView);
 
-            setUpUIElements();
+            setUpUIElements(isMutable);
             setUpButtons(listener);
         }
 
-        public void setUpUIElements(){
+        public void setUpUIElements(boolean isMutable){
             activateButton = itemView.findViewById(R.id.ApplySequentialGeneratorButton);
             deleteButton = itemView.findViewById(R.id.DeleteSequentialGeneratorButton);
             generatorTypeText = itemView.findViewById(R.id.GeneratorTypeText);
-            sequentialGeneratorScheduledColorDisplay = itemView.findViewById(R.id.SequentialGeneratorScheduledColorDisplay);
             ledStateRecyclerView = itemView.findViewById(R.id.SequentialGeneratorLEDStatesRecyclerView);
+            if(!isMutable){
+                activateButton.setVisibility(View.INVISIBLE);
+                deleteButton.setVisibility(View.INVISIBLE);
+            }
         }
 
         public void setUpButtons(final OnItemClickListener listener){
@@ -105,34 +107,53 @@ public class SequentialGeneratorDisplayAdapter extends RecyclerView.Adapter<Sequ
             );
         }
 
-        public void setScheduledDisplayColor(Color color){
-            GradientDrawable gradientDrawable = (GradientDrawable) sequentialGeneratorScheduledColorDisplay.getBackground();
-            gradientDrawable.setColor(color.toAndroidColor());
-            sequentialGeneratorScheduledColorDisplay.setBackground(gradientDrawable);
-        }
-
         public void setGeneratorTypeText(String text){
             generatorTypeText.setText(text);
         }
 
-        public void setUpLEDStateDisplayRecyclerView(SequentialGenerator generator){
+        public void setUpLEDStateDisplayRecyclerView(SequentialGenerator generator, boolean shouldPassListener, OnItemClickListener listener, int desiredPosition){
             ledStateDisplayViewAdapter = new LEDStateDisplayAdapter(generator, false);
             ledStateDisplayLayoutManager = new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.HORIZONTAL, false);
             ledStateRecyclerView.setLayoutManager(ledStateDisplayLayoutManager);
             ledStateRecyclerView.setAdapter(ledStateDisplayViewAdapter);
             ledStateRecyclerView.addItemDecoration(new HorizontalSpaceItemDecoration(7));
+            if(shouldPassListener){
+                ledStateDisplayViewAdapter.setOnItemClickListener(
+                        new LEDStateDisplayAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(int position) {
+                                if(desiredPosition >= 0) {
+                                    listener.onItemClick(desiredPosition);
+                                } else {
+                                    listener.onItemClick(getAdapterPosition());
+                                }
+                            }
+
+                            @Override
+                            public void onDeleteClick(int position) {
+                            }
+                        }
+                );
+            }
         }
     }
 
-    public SequentialGeneratorDisplayAdapter(SingleColorLEDStrip ledStrip){
+    public SequentialGeneratorDisplayAdapter(SingleColorLEDStrip ledStrip, boolean isMutable, boolean shouldPassListener){
+        this(ledStrip, isMutable, shouldPassListener, -1);
+    }
+
+    public SequentialGeneratorDisplayAdapter(SingleColorLEDStrip ledStrip, boolean isMutable, boolean shouldPassListener, int desiredPosition){
+        this.desiredPosition = desiredPosition;
         this.ledStrip = ledStrip;
+        this.isMutable = isMutable;
+        this.shouldPassListener = shouldPassListener;
     }
 
     @NonNull
     @Override
     public SequentialGeneratorDisplayAdapter.SequentialGeneratorDisplayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sequential_generator_card, parent, false);
-        SequentialGeneratorDisplayViewHolder viewHolder = new SequentialGeneratorDisplayViewHolder(view, listener);
+        SequentialGeneratorDisplayViewHolder viewHolder = new SequentialGeneratorDisplayViewHolder(view, listener, isMutable);
         return viewHolder;
     }
 
@@ -140,9 +161,11 @@ public class SequentialGeneratorDisplayAdapter extends RecyclerView.Adapter<Sequ
     public void onBindViewHolder(@NonNull SequentialGeneratorDisplayAdapter.SequentialGeneratorDisplayViewHolder holder, int position) {
         SequentialGenerator generator = ledStrip.getGenerators().get(position);
         displayGeneratorTypeText(holder, generator);
-        holder.setUpLEDStateDisplayRecyclerView(generator);
+        holder.setUpLEDStateDisplayRecyclerView(generator, shouldPassListener, listener, desiredPosition);
         if(getItemCount() <= 1){
-            activeGenerator = 0;
+            ledStrip.setCurrentGeneratorIndex(0);
+            holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.activated_sequential_generator));
+        } else if(position == ledStrip.getActivatedGeneratorIndex()){
             holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.activated_sequential_generator));
         }
     }
@@ -153,11 +176,11 @@ public class SequentialGeneratorDisplayAdapter extends RecyclerView.Adapter<Sequ
     }
 
     public int getActiveGenerator(){
-        return activeGenerator;
+        return ledStrip.getActivatedGeneratorIndex();
     }
 
     public void setActiveGenerator(int index){
-        activeGenerator = index;
+        ledStrip.setCurrentGeneratorIndex(index);
     }
 
     public void displayGeneratorTypeText(@NonNull SequentialGeneratorDisplayAdapter.SequentialGeneratorDisplayViewHolder holder, SequentialGenerator generator){

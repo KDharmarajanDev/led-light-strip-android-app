@@ -24,15 +24,18 @@ public class SingleColorLEDStrip implements Parcelable {
     }
 
     public SequentialGenerator getSequentialGenerator(){
+        if(generators.size() == 0){
+            return new SequentialGenerator(new ArrayList<>());
+        }
         return generators.get(currentGeneratorIndex);
     }
 
-    public void moveAlongSequentialGenerator(int amount){
-        if(currentGeneratorIndex+amount > generators.size()){
-            currentGeneratorIndex = (amount - (generators.size() - currentGeneratorIndex) - 1) % (generators.size() + 1);
-        } else {
-            currentGeneratorIndex+=amount;
-        }
+    public void setCurrentGeneratorIndex(int index){
+        this.currentGeneratorIndex = index;
+    }
+
+    public int getActivatedGeneratorIndex(){
+        return currentGeneratorIndex;
     }
 
     public ArrayList<SequentialGenerator> getGenerators(){
@@ -49,6 +52,18 @@ public class SingleColorLEDStrip implements Parcelable {
 
     public void setBluePin(int bluePin){
         this.bluePin = bluePin;
+    }
+
+    public int getRedPin(){
+        return redPin;
+    }
+
+    public int getGreenPin(){
+        return greenPin;
+    }
+
+    public int getBluePin(){
+        return bluePin;
     }
 
     protected SingleColorLEDStrip(Parcel in) {

@@ -69,6 +69,7 @@ public class CreateLEDStripPopup extends Activity {
 
     public void setUpLEDStrip(){
         Intent inputLEDStrip = getIntent();
+
         if(inputLEDStrip != null && inputLEDStrip.getExtras() != null && inputLEDStrip.getExtras().getParcelable("input-led-strip") != null){
             ledStrip = inputLEDStrip.getExtras().getParcelable("input-led-strip");
         } else {
@@ -85,7 +86,7 @@ public class CreateLEDStripPopup extends Activity {
         cancelLEDStripButton = findViewById(R.id.CancelLEDStripButton);
 
         sequentialGeneratorRecyclerView = findViewById(R.id.CreateLEDStripSequentialGeneratorRecyclerView);
-        sequentialGeneratorDisplayAdapter = new SequentialGeneratorDisplayAdapter(ledStrip);
+        sequentialGeneratorDisplayAdapter = new SequentialGeneratorDisplayAdapter(ledStrip, true, true);
         sequentialGeneratorRecyclerViewLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         sequentialGeneratorRecyclerView.setLayoutManager(sequentialGeneratorRecyclerViewLinearLayoutManager);
 
@@ -131,9 +132,9 @@ public class CreateLEDStripPopup extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        ledStrip.setCurrentGeneratorIndex(sequentialGeneratorDisplayAdapter.getActiveGenerator());
                         Intent result = new Intent();
                         result.putExtra("led-strip", ledStrip);
-                        result.putExtra("selected-generator", sequentialGeneratorDisplayAdapter.getActiveGenerator());
                         setResult(Activity.RESULT_OK, result);
                         finish();
                     }
@@ -241,6 +242,10 @@ public class CreateLEDStripPopup extends Activity {
     public void removeSequentialGenerator(int removedIndex){
         ledStrip.getGenerators().remove(removedIndex);
         sequentialGeneratorDisplayAdapter.notifyItemRemoved(removedIndex);
+        if(sequentialGeneratorDisplayAdapter.getActiveGenerator() == removedIndex && removedIndex != 0){
+            sequentialGeneratorDisplayAdapter.setActiveGenerator(0);
+            updateActivatedStatus(0, true);
+        }
     }
 
     public void updateActivatedStatus(int index, boolean isActivated){
