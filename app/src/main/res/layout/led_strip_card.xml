@@ -4,25 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/LEDStripCard"
     android:layout_width="match_parent"
-    android:layout_height="300dp">
+    android:layout_height="400dp"
+    android:background="@drawable/blue_border"
+    android:nestedScrollingEnabled="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/LEDStripCardConstraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/LEDStripCardRedPinText"
-            android:layout_width="107dp"
-            android:layout_height="49dp"
-            android:layout_marginTop="28dp"
-            android:gravity="start|center_vertical"
-            android:text="@string/red_pin"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
+        <Button
+            android:id="@+id/LEDStripDeleteButton"
+            android:layout_width="27dp"
+            android:layout_height="39dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/ic_delete_black_24dp"
+            app:layout_constraintStart_toEndOf="@+id/LEDStripCardBluePinText"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -49,26 +47,33 @@
             android:textColor="#000000"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.384"
+            app:layout_constraintHorizontal_bias="0.431"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/LEDStripCardRedPinText"
+            android:layout_width="107dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="28dp"
+            android:gravity="start|center_vertical"
+            android:text="@string/red_pin"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.052"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/SequentialGeneratorRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_width="400dp"
+            android:layout_height="318dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/LEDStripCardRedPinText" />
-
-        <Button
-            android:id="@+id/LEDStripDeleteButton"
-            android:layout_width="27dp"
-            android:layout_height="39dp"
-            android:layout_marginStart="22dp"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/ic_delete_black_24dp"
-            app:layout_constraintStart_toEndOf="@+id/LEDStripCardBluePinText"
-            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

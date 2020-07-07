@@ -1,12 +1,14 @@
 package com.ledlightscheduler.uimanager.recyclerviewadapters;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,6 +45,7 @@ public class LEDStripDisplayAdapter extends RecyclerView.Adapter<LEDStripDisplay
 
             setUpUIElements();
             setUpButton(listener);
+            setUpBackground();
 
             itemView.setOnClickListener(
                     new View.OnClickListener() {
@@ -78,7 +81,28 @@ public class LEDStripDisplayAdapter extends RecyclerView.Adapter<LEDStripDisplay
             sequentialGeneratorLayoutManager = new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.VERTICAL, false);
             sequentialGeneratorRecyclerView.setLayoutManager(sequentialGeneratorLayoutManager);
             sequentialGeneratorRecyclerView.setAdapter(sequentialGeneratorViewAdapter);
+            sequentialGeneratorRecyclerView.setNestedScrollingEnabled(false);
             sequentialGeneratorRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(10));
+            sequentialGeneratorRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+                @Override
+                public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                    int action = e.getAction();
+                    switch (action) {
+                        case MotionEvent.ACTION_MOVE:
+                            rv.getParent().requestDisallowInterceptTouchEvent(true);
+                            break;
+                    }
+                    return false;
+                }
+
+                @Override
+                public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+                }
+
+                @Override
+                public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+                }
+            });
             if(shouldPassListener) {
                 sequentialGeneratorViewAdapter.setOnItemClickListener(
                         new SequentialGeneratorDisplayAdapter.OnItemClickListener() {
@@ -96,6 +120,14 @@ public class LEDStripDisplayAdapter extends RecyclerView.Adapter<LEDStripDisplay
                             }
                         }
                 );
+                sequentialGeneratorRecyclerView.setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                listener.onItemClick(getAdapterPosition());
+                            }
+                        }
+                );
             }
         }
 
@@ -103,6 +135,10 @@ public class LEDStripDisplayAdapter extends RecyclerView.Adapter<LEDStripDisplay
             redPinText.setText("Red Pin: " + redPin);
             greenPinText.setText("Green Pin: " + greenPin);
             bluePinText.setText("Blue Pin: " + bluePin);
+        }
+
+        public void setUpBackground(){
+            itemView.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.blue_border));
         }
     }
 

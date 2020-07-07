@@ -134,6 +134,18 @@ public class SequentialGeneratorDisplayAdapter extends RecyclerView.Adapter<Sequ
                             }
                         }
                 );
+                ledStateRecyclerView.setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if(desiredPosition >= 0) {
+                                    listener.onItemClick(desiredPosition);
+                                } else {
+                                    listener.onItemClick(getAdapterPosition());
+                                }
+                            }
+                        }
+                );
             }
         }
     }
@@ -167,6 +179,8 @@ public class SequentialGeneratorDisplayAdapter extends RecyclerView.Adapter<Sequ
             holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.activated_sequential_generator));
         } else if(position == ledStrip.getActivatedGeneratorIndex()){
             holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.activated_sequential_generator));
+        } else {
+            holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.deactivated_sequential_generator));
         }
     }
 
