@@ -13,8 +13,8 @@
         android:id="@+id/ConnectionSettingsButton"
         android:layout_width="wrap_content"
         android:layout_height="29dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
         android:background="#03A9F4"
         android:text="@string/connection_settings"
         android:textColor="#FFFFFF"
@@ -26,23 +26,22 @@
         android:layout_width="178dp"
         android:layout_height="26dp"
         android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
+        android:layout_marginTop="8dp"
         android:clickable="true"
+        android:drawableEnd="@android:drawable/presence_busy"
         android:drawableRight="@android:drawable/presence_busy"
         android:focusable="true"
         android:text="@string/arduino_connected"
         android:textSize="18sp"
-        app:fontFamily="casual"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:drawableEnd="@android:drawable/presence_busy" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/AddLEDStripButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="350dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="344dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/round_button"
         android:text="@string/PlusSymbol"
         android:textAlignment="center"
@@ -55,9 +54,9 @@
         android:id="@+id/textView2"
         android:layout_width="118dp"
         android:layout_height="31dp"
-        android:layout_marginStart="144dp"
-        android:layout_marginLeft="144dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="164dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal"
         android:text="@string/led_strips"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,5 +68,25 @@
         android:layout_height="616dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/DownloadFromArduinoButton"
+        android:layout_width="62dp"
+        android:layout_height="65dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/download_button_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ArduinoConnectedText" />
+
+    <Button
+        android:id="@+id/UploadToArduinoButton"
+        android:layout_width="62dp"
+        android:layout_height="65dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/upload_button_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ArduinoConnectedText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

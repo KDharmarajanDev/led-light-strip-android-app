@@ -2,21 +2,16 @@ package com.ledlightscheduler.arduinopackets.packets;
 
 public class GetInformationSerialPacket extends SerialPacket {
 
-    boolean isGettingAllInformation;
-
-    public GetInformationSerialPacket(){
-
-    }
-
-    public GetInformationSerialPacket(boolean isGettingAllInformation){
-        this.isGettingAllInformation = isGettingAllInformation;
-    }
+    public GetInformationSerialPacket(){}
 
     public String serialize(){
-        return "";
+        return "GET";
     }
 
     public GetInformationSerialPacket deserialize(String input){
+        if(input.contains("GET")){
+            return new GetInformationSerialPacket();
+        }
         return null;
     }
 

@@ -15,11 +15,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.ledlightscheduler.ledstriputilities.Scheduler;
-import com.ledlightscheduler.ledstriputilities.ledstates.TransitionLEDState;
 import com.ledlightscheduler.ledstriputilities.ledstrips.SingleColorLEDStrip;
 import com.ledlightscheduler.uimanager.CreateLEDStripPopup;
 import com.ledlightscheduler.uimanager.recyclerviewadapters.LEDStripDisplayAdapter;
-import com.ledlightscheduler.uimanager.recyclerviewadapters.SequentialGeneratorDisplayAdapter;
 import com.ledlightscheduler.uimanager.recyclerviewpsacer.VerticalSpaceItemDecoration;
 
 import java.util.ArrayList;
@@ -28,12 +26,14 @@ public class MainActivity extends AppCompatActivity {
 
     private BluetoothAdapter bluetoothAdapter;
 
-    public final static int REQUEST_ENABLE_BT = 1;
+    private static final int REQUEST_BLUETOOTH_CODE = -1;
 
     //UI elements
     private TextView connectionStatusText;
     private Button connectionSettingsButton;
     private Button addLEDStripButton;
+    private Button uploadDataToArduinoButton;
+    private Button downloadDataFromArduinoButton;
     private RecyclerView ledStripRecyclerView;
     private LEDStripDisplayAdapter ledStripRecyclerViewAdapter;
     private RecyclerView.LayoutManager ledStripLayoutManager;
@@ -44,26 +44,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         setUpUIElements();
+        setUpButtons();
 
-        Log.i("[Light Strip Scheduler]", "Setting up Button Clicking Events.");
-        connectionSettingsButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                startActivity(new Intent(MainActivity.this, ConnectionDebugActivity.class));
-            }
-        });
-
-        addLEDStripButton.setOnClickListener(view -> {
-            Intent getLEDStrip = new Intent(MainActivity.this, CreateLEDStripPopup.class);
-            startActivityForResult(getLEDStrip, ledStripRecyclerViewAdapter.getItemCount());
-        });
-
-        Log.i("[Light Strip Scheduler]", "Attempting to set up bluetooth connection.");
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(!bluetoothAdapter.isEnabled()){
             connectionStatusText.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.presence_away,0);
             Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBluetooth, REQUEST_ENABLE_BT);
+            startActivityForResult(enableBluetooth, REQUEST_BLUETOOTH_CODE);
         } else {
             connectionStatusText.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.presence_online,0);
         }
@@ -77,6 +64,29 @@ public class MainActivity extends AppCompatActivity {
         connectionSettingsButton = findViewById(R.id.ConnectionSettingsButton);
         addLEDStripButton = findViewById(R.id.AddLEDStripButton);
         ledStripRecyclerView = findViewById(R.id.LEDStripRecyclerView);
+    }
+
+    public void setUpButtons(){
+        connectionSettingsButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                startActivity(new Intent(MainActivity.this, ConnectionDebugActivity.class));
+            }
+        });
+
+        addLEDStripButton.setOnClickListener(view -> {
+            Intent getLEDStrip = new Intent(MainActivity.this, CreateLEDStripPopup.class);
+            startActivityForResult(getLEDStrip, ledStripRecyclerViewAdapter.getItemCount());
+        });
+
+        uploadDataToArduinoButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                }
+        );
     }
 
     public void setUpRecyclerView(ArrayList<SingleColorLEDStrip> ledStrips){
@@ -112,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     addLEDStrip(inputLEDStrip);
                 }
+            } else if(requestCode == REQUEST_BLUETOOTH_CODE){
+                
             }
         }
     }
