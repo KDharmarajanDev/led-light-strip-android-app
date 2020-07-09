@@ -71,4 +71,8 @@ public class LEDState implements Parcelable {
             return new LEDState[size];
         }
     };
+
+    public String serialize(){
+        return "[" + duration + "," + color.serialize() + "]";
+    }
 }

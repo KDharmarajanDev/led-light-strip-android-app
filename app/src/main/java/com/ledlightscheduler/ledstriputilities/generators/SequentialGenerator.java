@@ -115,4 +115,15 @@ public class SequentialGenerator implements Parcelable {
             return new SequentialGenerator[size];
         }
     };
+
+    public String serialize(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("[0");
+        for(int i = 0; i < states.size(); i++){
+            builder.append(",");
+            builder.append(states.get(i).serialize());
+        }
+        builder.append("]");
+        return builder.toString();
+    }
 }

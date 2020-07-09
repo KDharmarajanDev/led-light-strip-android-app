@@ -11,13 +11,13 @@
 
     <Button
         android:id="@+id/ConnectionSettingsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="29dp"
+        android:layout_width="172dp"
+        android:layout_height="28dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        android:background="#03A9F4"
+        android:background="@drawable/blue_border_skinny"
         android:text="@string/connection_settings"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/design_default_color_primary_dark"
         app:layout_constraintStart_toEndOf="@+id/ArduinoConnectedText"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,7 +29,6 @@
         android:layout_marginTop="8dp"
         android:clickable="true"
         android:drawableEnd="@android:drawable/presence_busy"
-        android:drawableRight="@android:drawable/presence_busy"
         android:focusable="true"
         android:text="@string/arduino_connected"
         android:textSize="18sp"

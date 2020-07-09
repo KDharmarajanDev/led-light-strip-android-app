@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.os.SystemClock;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,7 +32,7 @@ import java.util.UUID;
 
 public class ConnectionDebugActivity extends AppCompatActivity {
 
-    // GUI Components
+    // UI Components
     private TextView mBluetoothStatus;
     private TextView mReadBuffer;
     private Button mScanBtn;
@@ -44,10 +45,9 @@ public class ConnectionDebugActivity extends AppCompatActivity {
     private ListView mDevicesListView;
 
     private Handler mHandler; // Our main handler that will receive callback notifications
-    private ConnectedThread mConnectedThread; // bluetooth background worker thread to send and receive data
-    private BluetoothSocket mBTSocket = null; // bi-directional client-to-client data path
+    private BluetoothSocket mBTSocket; // bi-directional client-to-client data path
 
-    private static final UUID BTMODULEUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); // "random" unique identifier
+    private static final UUID BTMODULEUUID = UUID.randomUUID(); // "random" unique identifier
 
 
     // #defines for identifying shared types between calling functions
@@ -234,104 +234,12 @@ public class ConnectionDebugActivity extends AppCompatActivity {
             new Thread()
             {
                 public void run() {
-                    boolean fail = false;
-
                     BluetoothDevice device = mBTAdapter.getRemoteDevice(address);
-
-                    try {
-                        mBTSocket = createBluetoothSocket(device);
-                    } catch (IOException e) {
-                        fail = true;
-                        Toast.makeText(getBaseContext(), "Socket creation failed", Toast.LENGTH_SHORT).show();
-                    }
-                    // Establish the Bluetooth socket connection.
-                    try {
-                        mBTSocket.connect();
-                    } catch (IOException e) {
-                        try {
-                            fail = true;
-                            mBTSocket.close();
-                            mHandler.obtainMessage(CONNECTING_STATUS, -1, -1)
-                                    .sendToTarget();
-                        } catch (IOException e2) {
-                            //insert code to deal with this
-                            Toast.makeText(getBaseContext(), "Socket creation failed", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    if(!fail) {
-                        mConnectedThread = new ConnectedThread(mBTSocket);
-                        mConnectedThread.start();
-
-                        mHandler.obtainMessage(CONNECTING_STATUS, 1, -1, name)
-                                .sendToTarget();
-                    }
+                    Intent intent = new Intent();
+                    intent.putExtra("device", device);
+                    setResult(RESULT_OK, intent);
                 }
             }.start();
         }
     };
-
-    private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
-        return  device.createRfcommSocketToServiceRecord(BTMODULEUUID);
-        //creates secure outgoing connection with BT device using UUID
-    }
-
-    private class ConnectedThread extends Thread {
-        private final BluetoothSocket mmSocket;
-        private final InputStream mmInStream;
-        private final OutputStream mmOutStream;
-
-        public ConnectedThread(BluetoothSocket socket) {
-            mmSocket = socket;
-            InputStream tmpIn = null;
-            OutputStream tmpOut = null;
-
-            // Get the input and output streams, using temp objects because
-            // member streams are final
-            try {
-                tmpIn = socket.getInputStream();
-                tmpOut = socket.getOutputStream();
-            } catch (IOException e) { }
-
-            mmInStream = tmpIn;
-            mmOutStream = tmpOut;
-        }
-
-        public void run() {
-            byte[] buffer = new byte[1024];  // buffer store for the stream
-            int bytes; // bytes returned from read()
-            // Keep listening to the InputStream until an exception occurs
-            while (true) {
-                try {
-                    // Read from the InputStream
-                    bytes = mmInStream.available();
-                    if(bytes != 0) {
-                        SystemClock.sleep(100); //pause and wait for rest of data. Adjust this depending on your sending speed.
-                        bytes = mmInStream.available(); // how many bytes are ready to be read?
-                        bytes = mmInStream.read(buffer, 0, bytes); // record how many bytes we actually read
-                        mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
-                                .sendToTarget(); // Send the obtained bytes to the UI activity
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-
-                    break;
-                }
-            }
-        }
-
-        /* Call this from the main activity to send data to the remote device */
-        public void write(String input) {
-            byte[] bytes = input.getBytes();           //converts entered String into bytes
-            try {
-                mmOutStream.write(bytes);
-            } catch (IOException e) { }
-        }
-
-        /* Call this from the main activity to shutdown the connection */
-        public void cancel() {
-            try {
-                mmSocket.close();
-            } catch (IOException e) { }
-        }
-    }
 }

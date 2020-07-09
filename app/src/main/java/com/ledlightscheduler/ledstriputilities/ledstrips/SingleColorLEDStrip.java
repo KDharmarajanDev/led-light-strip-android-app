@@ -110,4 +110,15 @@ public class SingleColorLEDStrip implements Parcelable {
             return new SingleColorLEDStrip[size];
         }
     };
+
+    public String serialize(){
+        StringBuilder builder = new StringBuilder();
+        builder.append(String.format("[%s,%s,%s",redPin, greenPin, bluePin));
+        for(SequentialGenerator generator : generators){
+            builder.append(",");
+            builder.append(generator.serialize());
+        }
+        builder.append("]");
+        return builder.toString();
+    }
 }

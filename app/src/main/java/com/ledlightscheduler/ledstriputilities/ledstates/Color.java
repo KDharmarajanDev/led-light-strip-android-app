@@ -3,6 +3,8 @@ package com.ledlightscheduler.ledstriputilities.ledstates;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.ledlightscheduler.arduinopackets.DeserializerHandler;
+
 public class Color implements Parcelable {
 
     private int red;
@@ -72,5 +74,23 @@ public class Color implements Parcelable {
 
     public int toAndroidColor(){
         return android.graphics.Color.rgb(red, green, blue);
+    }
+
+    public String serialize(){
+        return String.format("[%s,%s,%s]", red, green, blue);
+    }
+
+    public static Color deserialize (String representation){
+        DeserializerHandler deserializerHandler = new DeserializerHandler(representation);
+        return new Color(deserializerHandler.getNextInteger(),deserializerHandler.getNextInteger(),deserializerHandler.getNextInteger());
+    }
+
+    @Override
+    public boolean equals(Object other){
+        if(other instanceof Color){
+            Color color = (Color) other;
+            return color.getRed() == red && color.getGreen() == green && color.getBlue() == blue;
+        }
+        return false;
     }
 }

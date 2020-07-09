@@ -55,5 +55,10 @@ public class RandomGenerator extends SequentialGenerator {
         }
     };
 
+    @Override
+    public String serialize(){
+        String result = super.serialize();
+        return "[1" + result.substring(2);
+    }
 }
 
