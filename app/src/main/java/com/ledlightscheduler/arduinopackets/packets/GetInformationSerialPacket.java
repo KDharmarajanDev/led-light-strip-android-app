@@ -1,5 +1,7 @@
 package com.ledlightscheduler.arduinopackets.packets;
 
+import com.ledlightscheduler.MainActivity;
+
 public class GetInformationSerialPacket extends SerialPacket {
 
     public GetInformationSerialPacket(){}
@@ -9,10 +11,11 @@ public class GetInformationSerialPacket extends SerialPacket {
     }
 
     public GetInformationSerialPacket deserialize(String input){
-        if(input.contains("GET")){
-            return new GetInformationSerialPacket();
-        }
-        return null;
+        return new GetInformationSerialPacket();
     }
 
+    @Override
+    public void handle(MainActivity activity){
+        activity.sendPacket(new LEDStripsInformationPacket(activity.getLEDStrips()));
+    }
 }

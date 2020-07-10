@@ -60,5 +60,13 @@ public class RandomGenerator extends SequentialGenerator {
         String result = super.serialize();
         return "[1" + result.substring(2);
     }
+
+    @Override
+    public boolean equals(Object other){
+        if(other instanceof RandomGenerator){
+            return super.equals(other);
+        }
+        return false;
+    }
 }
 

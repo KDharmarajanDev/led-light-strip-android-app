@@ -3,6 +3,7 @@ package com.ledlightscheduler.ledstriputilities.ledstrips;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.ledlightscheduler.arduinopackets.DeserializerHandler;
 import com.ledlightscheduler.ledstriputilities.generators.SequentialGenerator;
 
 import java.util.ArrayList;
@@ -120,5 +121,38 @@ public class SingleColorLEDStrip implements Parcelable {
         }
         builder.append("]");
         return builder.toString();
+    }
+
+    public static SingleColorLEDStrip deserialize(String input){
+        if(input.length() >= 7){
+            DeserializerHandler handler = new DeserializerHandler(input);
+            int redPin = handler.getNextInteger();
+            int greenPin = handler.getNextInteger();
+            int bluePin = handler.getNextInteger();
+            ArrayList<SequentialGenerator> generators = new ArrayList<>();
+            String generatorString = handler.getNextItemInBrackets();
+            while(!generatorString.equals("")){
+                generators.add(SequentialGenerator.deserialize(generatorString));
+                generatorString = handler.getNextItemInBrackets();
+            }
+            return new SingleColorLEDStrip(redPin, greenPin, bluePin, generators);
+        }
+        return new SingleColorLEDStrip(0,0,0,new ArrayList<>());
+    }
+
+    @Override
+    public boolean equals(Object other){
+        if(other instanceof SingleColorLEDStrip){
+            SingleColorLEDStrip singleColorLEDStrip = (SingleColorLEDStrip) other;
+            if(singleColorLEDStrip.generators.size() == generators.size()){
+                for(int i = 0; i < generators.size(); i++){
+                    if(!singleColorLEDStrip.getGenerators().get(i).equals(generators.get(i))){
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
     }
 }

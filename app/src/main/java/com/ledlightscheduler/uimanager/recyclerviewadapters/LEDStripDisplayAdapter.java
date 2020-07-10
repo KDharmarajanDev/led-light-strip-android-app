@@ -158,6 +158,11 @@ public class LEDStripDisplayAdapter extends RecyclerView.Adapter<LEDStripDisplay
         return schedulers;
     }
 
+    public void setSchedulers(ArrayList<Scheduler> schedulers){
+        this.schedulers = schedulers;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public LEDStripDisplayAdapter.LEDStripDisplayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

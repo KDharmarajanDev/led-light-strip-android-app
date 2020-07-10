@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.ledlightscheduler.arduinopackets.DeserializerHandler;
+
 public class LEDState implements Parcelable {
 
     private Color color;
@@ -74,5 +76,29 @@ public class LEDState implements Parcelable {
 
     public String serialize(){
         return "[" + duration + "," + color.serialize() + "]";
+    }
+
+    public static LEDState deserialize(String input){
+        if(input.length() >= 11){
+            DeserializerHandler handler = new DeserializerHandler(input);
+            long duration = handler.getNextInteger();
+            Color startColor = Color.deserialize(handler.getNextItemInBrackets());
+            String possibleEndColor = handler.getNextItemInBrackets();
+            if(!possibleEndColor.equals("")){
+                return new TransitionLEDState(startColor, Color.deserialize(possibleEndColor), duration);
+            } else {
+                return new LEDState(startColor, duration);
+            }
+        }
+        return new LEDState();
+    }
+
+    @Override
+    public boolean equals(Object other){
+        if(other instanceof LEDState){
+            LEDState ledState = (LEDState) other;
+            return ledState.color.equals(color) && ledState.duration == duration;
+        }
+        return false;
     }
 }

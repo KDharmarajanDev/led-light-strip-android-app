@@ -86,4 +86,13 @@ public class TransitionLEDState extends LEDState implements Parcelable {
     public String serialize(){
         return "[" + super.getDuration() + "," + super.getColor().serialize() + "," + endColor.serialize() + "]";
     }
+
+    @Override
+    public boolean equals(Object other){
+        if(other instanceof TransitionLEDState){
+            TransitionLEDState ledState = (TransitionLEDState) other;
+            return super.equals(ledState) && ledState.endColor.equals(endColor);
+        }
+        return false;
+    }
 }

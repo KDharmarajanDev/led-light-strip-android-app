@@ -1,5 +1,7 @@
 package com.ledlightscheduler.arduinopackets;
 
+import java.util.Stack;
+
 public class DeserializerHandler {
 
     private String serializedRepresentation;
@@ -28,4 +30,25 @@ public class DeserializerHandler {
         return stringRepresentation.length() != 0 ? Integer.parseInt(stringRepresentation.toString()) : 0;
     }
 
+    public String getNextItemInBrackets(){
+        StringBuilder builder = new StringBuilder();
+        Stack<Character> brackets = new Stack<>();
+        while(currentIndex < serializedRepresentation.length()){
+            if(serializedRepresentation.charAt(currentIndex) == '['){
+                builder.append('[');
+                brackets.push('[');
+            } else if(serializedRepresentation.charAt(currentIndex) == ']' && brackets.size() > 0 && brackets.peek() == '['){
+                brackets.pop();
+                builder.append(']');
+                if(brackets.size() == 0){
+                    currentIndex++;
+                    break;
+                }
+            } else if (brackets.size() > 0){
+                builder.append(serializedRepresentation.charAt(currentIndex));
+            }
+            currentIndex++;
+        }
+        return builder.toString();
+    }
 }

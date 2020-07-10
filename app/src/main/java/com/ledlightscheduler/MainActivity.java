@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import com.ledlightscheduler.arduinopackets.SerialMessageHandler;
 import com.ledlightscheduler.arduinopackets.packets.GetInformationSerialPacket;
+import com.ledlightscheduler.arduinopackets.packets.LEDStripsInformationPacket;
+import com.ledlightscheduler.arduinopackets.packets.SerialPacket;
 import com.ledlightscheduler.ledstriputilities.Scheduler;
 import com.ledlightscheduler.ledstriputilities.ledstrips.SingleColorLEDStrip;
 import com.ledlightscheduler.uimanager.CreateLEDStripPopup;
@@ -68,6 +70,22 @@ public class MainActivity extends AppCompatActivity {
         setUpRecyclerView(new ArrayList<>());
     }
 
+    public void setLEDStrips(ArrayList<SingleColorLEDStrip> ledStrips){
+        ArrayList<Scheduler> schedulers = new ArrayList<>();
+        for(SingleColorLEDStrip ledStrip : ledStrips){
+            schedulers.add(new Scheduler(ledStrip));
+        }
+        ledStripRecyclerViewAdapter.setSchedulers(schedulers);
+    }
+
+    public ArrayList<SingleColorLEDStrip> getLEDStrips(){
+        ArrayList<SingleColorLEDStrip> ledStrips = new ArrayList<>();
+        for(Scheduler scheduler : ledStripRecyclerViewAdapter.getSchedulers()){
+            ledStrips.add(scheduler.getLEDStrip());
+        }
+        return ledStrips;
+    }
+
     public void setUpUIElements(){
         connectionStatusText = findViewById(R.id.ArduinoConnectedText);
         connectionSettingsButton = findViewById(R.id.ConnectionSettingsButton);
@@ -94,9 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(mConnectedThread != null){
-
-                        }
+                        sendPacket(new LEDStripsInformationPacket(getLEDStrips()));
                     }
                 }
         );
@@ -105,9 +121,7 @@ public class MainActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(mConnectedThread != null){
-                            mConnectedThread.write(new GetInformationSerialPacket().serialize());
-                        }
+                        sendPacket(new GetInformationSerialPacket());
                     }
                 }
         );
@@ -160,11 +174,11 @@ public class MainActivity extends AppCompatActivity {
                         mConenctedSocket = createBluetoothSocket(data.getExtras().getParcelable("device"));
                         mConenctedSocket.connect();
                         mConnectedThread = new ConnectedThread(mConenctedSocket);
-                        Toast.makeText(this, "Connected!", Toast.LENGTH_SHORT);
+                        Toast.makeText(this, "Connected!", Toast.LENGTH_SHORT).show();
                         connectionStatusText.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.presence_online, 0);
                     } catch (Exception e){
                         e.printStackTrace();
-                        Toast.makeText(this, "Couldn't connect!", Toast.LENGTH_SHORT);
+                        Toast.makeText(this, "Couldn't connect!", Toast.LENGTH_SHORT).show();
                         connectionStatusText.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.presence_away, 0);
                     }
                 }
@@ -226,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
                                 new InputStreamReader(mmInStream, StandardCharsets.UTF_8))
                                 .lines()
                                 .collect(Collectors.joining("\n"));
-                        SerialMessageHandler.getHandlerInstance().handleMessage(output);
+                        SerialMessageHandler.getHandlerInstance().handleMessage(output, MainActivity.this);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -256,5 +270,13 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
         return  device.createRfcommSocketToServiceRecord(BTMODULEUUID);
         //creates secure outgoing connection with BT device using UUID
+    }
+
+    public void sendPacket(SerialPacket packet){
+        if(mConnectedThread != null){
+            mConnectedThread.write(packet.serialize());
+        } else {
+            Toast.makeText(MainActivity.this, "Device not connected", Toast.LENGTH_SHORT).show();
+        }
     }
 }

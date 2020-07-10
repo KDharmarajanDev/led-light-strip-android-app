@@ -3,6 +3,7 @@ package com.ledlightscheduler.ledstriputilities.generators;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.ledlightscheduler.arduinopackets.DeserializerHandler;
 import com.ledlightscheduler.ledstriputilities.ledstates.LEDState;
 
 import java.util.ArrayList;
@@ -125,5 +126,40 @@ public class SequentialGenerator implements Parcelable {
         }
         builder.append("]");
         return builder.toString();
+    }
+
+    public static SequentialGenerator deserialize(String input){
+        if(input.length() >= 3){
+            DeserializerHandler handler = new DeserializerHandler(input);
+            int type = handler.getNextInteger();
+            ArrayList<LEDState> ledStates = new ArrayList<>();
+            String nextBracketString = handler.getNextItemInBrackets();
+            while(!nextBracketString.equals("")){
+                ledStates.add(LEDState.deserialize(nextBracketString));
+                nextBracketString = handler.getNextItemInBrackets();
+            }
+            if(type == 0){
+                return new SequentialGenerator(ledStates);
+            } else {
+                return new RandomGenerator(ledStates);
+            }
+        }
+        return new SequentialGenerator(new ArrayList<>());
+    }
+
+    @Override
+    public boolean equals(Object other){
+        if(other instanceof SequentialGenerator){
+            SequentialGenerator generator = (SequentialGenerator) other;
+            if(generator.getStates().size() == states.size()) {
+                for (int i = 0; i < states.size(); i++) {
+                    if(!states.get(i).equals(generator.getState(i))){
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
     }
 }

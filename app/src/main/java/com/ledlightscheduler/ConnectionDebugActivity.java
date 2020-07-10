@@ -88,7 +88,6 @@ public class ConnectionDebugActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     mReadBuffer.setText(readMessage);
-                    serialMessageHandler.handleMessage(readMessage);
                     Toast.makeText(getApplicationContext(),"Recieved Information!",Toast.LENGTH_LONG).show();
                 }
 

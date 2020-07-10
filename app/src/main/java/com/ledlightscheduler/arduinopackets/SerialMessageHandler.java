@@ -1,5 +1,6 @@
 package com.ledlightscheduler.arduinopackets;
 
+import com.ledlightscheduler.MainActivity;
 import com.ledlightscheduler.arduinopackets.packets.SerialPacket;
 import com.ledlightscheduler.arduinopackets.packets.SerialPacketKeys;
 
@@ -32,14 +33,14 @@ public class SerialMessageHandler {
         return handlerInstance;
     }
 
-    public void handleMessage(String message) {
+    public void handleMessage(String message, MainActivity activity) {
         new Thread() {
             @Override
             public void run() {
                 String messagePrefix = message.split(" ")[0];
                 if (stringSerialPacketKeysHashMap.containsKey(messagePrefix)) {
                     if (keyToExample.containsKey(stringSerialPacketKeysHashMap.get(messagePrefix))) {
-                        keyToExample.get(stringSerialPacketKeysHashMap.get(messagePrefix)).deserialize(message);
+                        keyToExample.get(stringSerialPacketKeysHashMap.get(messagePrefix)).deserialize(message).handle(activity);
                     }
                 }
             }
