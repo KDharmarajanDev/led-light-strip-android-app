@@ -2,7 +2,6 @@ package com.ledlightscheduler.arduinopackets.packets;
 
 import com.ledlightscheduler.MainActivity;
 import com.ledlightscheduler.arduinopackets.DeserializerHandler;
-import com.ledlightscheduler.ledstriputilities.generators.SequentialGenerator;
 import com.ledlightscheduler.ledstriputilities.ledstrips.SingleColorLEDStrip;
 
 import java.util.ArrayList;

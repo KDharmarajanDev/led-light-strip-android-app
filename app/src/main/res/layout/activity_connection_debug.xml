@@ -63,32 +63,40 @@
         </LinearLayout>
 
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/bluetooth_on"
             android:id="@+id/scan"
-            />
-
-        <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/bluetooth_off"
+            android:background="@drawable/blue_border_skinny"
+            android:text="@string/bluetooth_on"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <Button
             android:id="@+id/off"
-            />
-
-        <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/show_paired_devices"
+            android:background="@drawable/blue_border_skinny"
+            android:text="@string/bluetooth_off"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <Button
             android:id="@+id/PairedBtn"
-            />
-
-        <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/discover_new_devices"
+            android:background="@drawable/blue_border_skinny"
+            android:text="@string/show_paired_devices"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <Button
             android:id="@+id/discover"
-            />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/blue_border_skinny"
+            android:text="@string/discover_new_devices"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
         <ListView
             android:layout_width="wrap_content"
