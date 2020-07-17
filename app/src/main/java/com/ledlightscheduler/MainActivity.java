@@ -2,8 +2,6 @@ package com.ledlightscheduler;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -11,13 +9,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ledlightscheduler.arduinopackets.SerialMessageHandler;
 import com.ledlightscheduler.arduinopackets.packets.GetInformationSerialPacket;
 import com.ledlightscheduler.arduinopackets.packets.LEDStripsInformationPacket;
 import com.ledlightscheduler.arduinopackets.packets.SerialPacket;
@@ -27,24 +23,13 @@ import com.ledlightscheduler.uimanager.CreateLEDStripPopup;
 import com.ledlightscheduler.uimanager.recyclerviewadapters.LEDStripDisplayAdapter;
 import com.ledlightscheduler.uimanager.recyclerviewpsacer.VerticalSpaceItemDecoration;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
 
     //Bluetooth Items
     private BluetoothAdapter bluetoothAdapter;
-    private ConnectedThread mConnectedThread; // bluetooth background worker thread to send and receive data
-    private BluetoothSocket mConenctedSocket;
-    private static final int REQUEST_BLUETOOTH_CODE = -1;
-    private static final UUID BTMODULEUUID = UUID.randomUUID(); // Device UUID
 
     //UI elements
     private TextView connectionStatusText;
@@ -55,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView ledStripRecyclerView;
     private LEDStripDisplayAdapter ledStripRecyclerViewAdapter;
     private RecyclerView.LayoutManager ledStripLayoutManager;
+
+    private static MainActivity instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Sets up Recycler View
         setUpRecyclerView(new ArrayList<>());
+
+        instance = this;
     }
 
     public void setLEDStrips(ArrayList<SingleColorLEDStrip> ledStrips){
@@ -113,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         sendPacket(new LEDStripsInformationPacket(getLEDStrips()));
+                        setConnectionStatus(ConnectionDebugActivity.isConnected());
                     }
                 }
         );
@@ -122,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         sendPacket(new GetInformationSerialPacket());
+                        setConnectionStatus(ConnectionDebugActivity.isConnected());
                     }
                 }
         );
@@ -154,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(!bluetoothAdapter.isEnabled()){
             Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBluetooth, REQUEST_BLUETOOTH_CODE);
+            startActivityForResult(enableBluetooth, -1);
         }
     }
 
@@ -169,21 +160,10 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         addLEDStrip(inputLEDStrip);
                     }
-                } else if(data.getExtras().getParcelable("device") != null){
-                    try {
-                        mConenctedSocket = createBluetoothSocket(data.getExtras().getParcelable("device"));
-                        mConenctedSocket.connect();
-                        mConnectedThread = new ConnectedThread(mConenctedSocket);
-                        Toast.makeText(this, "Connected!", Toast.LENGTH_SHORT).show();
-                        connectionStatusText.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.presence_online, 0);
-                    } catch (Exception e){
-                        e.printStackTrace();
-                        Toast.makeText(this, "Couldn't connect!", Toast.LENGTH_SHORT).show();
-                        connectionStatusText.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.presence_away, 0);
-                    }
                 }
             }
         }
+        setConnectionStatus(ConnectionDebugActivity.isConnected());
     }
 
     public void modifyLEDStrip(int index, SingleColorLEDStrip ledStrip){
@@ -203,80 +183,25 @@ public class MainActivity extends AppCompatActivity {
         ledStripRecyclerViewAdapter.notifyItemRemoved(removedIndex);
     }
 
-    private class ConnectedThread extends Thread {
-        private final BluetoothSocket mmSocket;
-        private final InputStream mmInStream;
-        private final OutputStream mmOutStream;
-        private boolean isCanceled;
-
-        public ConnectedThread(BluetoothSocket socket) {
-            mmSocket = socket;
-            InputStream tmpIn = null;
-            OutputStream tmpOut = null;
-
-            // Get the input and output streams, using temp objects because
-            // member streams are final
-            try {
-                tmpIn = socket.getInputStream();
-                tmpOut = socket.getOutputStream();
-            } catch (IOException e) { }
-
-            mmInStream = tmpIn;
-            mmOutStream = tmpOut;
-
-            isCanceled = false;
-        }
-
-        public void run() {
-            int bytes; // bytes returned from read()
-            // Keep listening to the InputStream until an exception occurs
-            while (!isCanceled) {
-                try {
-                    // Read from the InputStream
-                    bytes = mmInStream.available();
-                    if(bytes != 0) {
-                        SystemClock.sleep(100); //pause and wait for rest of data. Adjust this depending on your sending speed.
-                        String output = new BufferedReader(
-                                new InputStreamReader(mmInStream, StandardCharsets.UTF_8))
-                                .lines()
-                                .collect(Collectors.joining("\n"));
-                        SerialMessageHandler.getHandlerInstance().handleMessage(output, MainActivity.this);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-
-                    break;
-                }
-            }
-        }
-
-        /* Call this from the main activity to send data to the remote device */
-        public void write(String input) {
-            byte[] bytes = input.getBytes();           //converts entered String into bytes
-            try {
-                mmOutStream.write(bytes);
-            } catch (IOException e) { }
-        }
-
-        /* Call this from the main activity to shutdown the connection */
-        public void cancel() {
-            isCanceled = true;
-            try {
-                mmSocket.close();
-            } catch (IOException e) { }
-        }
-    }
-
-    private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
-        return  device.createRfcommSocketToServiceRecord(BTMODULEUUID);
-        //creates secure outgoing connection with BT device using UUID
-    }
-
     public void sendPacket(SerialPacket packet){
-        if(mConnectedThread != null){
-            mConnectedThread.write(packet.serialize());
+        if(ConnectionDebugActivity.isConnected()){
+            ConnectionDebugActivity.getConnectedThread().sendPacket(packet);
         } else {
             Toast.makeText(MainActivity.this, "Device not connected", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static MainActivity getInstance(){
+        return instance;
+    }
+
+    public void setConnectionStatus(boolean connected){
+        if(connected){
+            Toast.makeText(this, "Connected!", Toast.LENGTH_SHORT).show();
+            connectionStatusText.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.presence_online, 0);
+        } else {
+            Toast.makeText(this, "Couldn't connect!", Toast.LENGTH_SHORT).show();
+            connectionStatusText.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.presence_away, 0);
         }
     }
 }

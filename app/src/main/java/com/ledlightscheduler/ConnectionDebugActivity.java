@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.os.SystemClock;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,13 +21,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ledlightscheduler.arduinopackets.SerialMessageHandler;
+import com.ledlightscheduler.arduinopackets.packets.SerialPacket;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class ConnectionDebugActivity extends AppCompatActivity {
 
@@ -45,10 +49,10 @@ public class ConnectionDebugActivity extends AppCompatActivity {
     private ListView mDevicesListView;
 
     private Handler mHandler; // Our main handler that will receive callback notifications
-    private BluetoothSocket mBTSocket; // bi-directional client-to-client data path
 
-    private static final UUID BTMODULEUUID = UUID.randomUUID(); // "random" unique identifier
-
+    private static ConnectedThread mConnectedThread; // bluetooth background worker thread to send and receive data
+    private BluetoothSocket mConenctedSocket;
+    private static final UUID BTMODULEUUID = UUID.randomUUID(); // Device UUID
 
     // #defines for identifying shared types between calling functions
     private final static int REQUEST_ENABLE_BT = 1; // used to identify adding bluetooth names
@@ -234,11 +238,99 @@ public class ConnectionDebugActivity extends AppCompatActivity {
             {
                 public void run() {
                     BluetoothDevice device = mBTAdapter.getRemoteDevice(address);
-                    Intent intent = new Intent();
-                    intent.putExtra("device", device);
-                    setResult(RESULT_OK, intent);
+                    try {
+                        mConenctedSocket = createBluetoothSocket(device);
+                        mConenctedSocket.connect();
+                        mConnectedThread = new ConnectedThread(mConenctedSocket);
+                        mBluetoothStatus.setText("Connected");
+                        Toast.makeText(ConnectionDebugActivity.this, "Connected!", Toast.LENGTH_SHORT).show();
+                    } catch (Exception e){
+                        e.printStackTrace();
+                        mBluetoothStatus.setText("Disconnected");
+                        Toast.makeText(ConnectionDebugActivity.this, "Couldn't connect!", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }.start();
         }
     };
+
+    public class ConnectedThread extends Thread {
+        private final BluetoothSocket mmSocket;
+        private final InputStream mmInStream;
+        private final OutputStream mmOutStream;
+        private boolean isCanceled;
+
+        public ConnectedThread(BluetoothSocket socket) {
+            mmSocket = socket;
+            InputStream tmpIn = null;
+            OutputStream tmpOut = null;
+
+            // Get the input and output streams, using temp objects because
+            // member streams are final
+            try {
+                tmpIn = socket.getInputStream();
+                tmpOut = socket.getOutputStream();
+            } catch (IOException e) { }
+
+            mmInStream = tmpIn;
+            mmOutStream = tmpOut;
+
+            isCanceled = false;
+        }
+
+        public void run() {
+            int bytes; // bytes returned from read()
+            // Keep listening to the InputStream until an exception occurs
+            while (!isCanceled) {
+                try {
+                    // Read from the InputStream
+                    bytes = mmInStream.available();
+                    if(bytes != 0) {
+                        SystemClock.sleep(100); //pause and wait for rest of data. Adjust this depending on your sending speed.
+                        String output = new BufferedReader(
+                                new InputStreamReader(mmInStream, StandardCharsets.UTF_8))
+                                .lines()
+                                .collect(Collectors.joining("\n"));
+                        SerialMessageHandler.getHandlerInstance().handleMessage(output, MainActivity.getInstance());
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+
+                    break;
+                }
+            }
+        }
+
+        public void sendPacket(SerialPacket packet){
+            mConnectedThread.write(packet.serialize());
+        }
+
+        /* Call this from the main activity to send data to the remote device */
+        public void write(String input) {
+            byte[] bytes = input.getBytes();           //converts entered String into bytes
+            try {
+                mmOutStream.write(bytes);
+            } catch (IOException e) { }
+        }
+
+        /* Call this from the main activity to shutdown the connection */
+        public void cancel() {
+            isCanceled = true;
+            try {
+                mmSocket.close();
+            } catch (IOException e) { }
+        }
+    }
+
+    private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
+        return  device.createRfcommSocketToServiceRecord(BTMODULEUUID);
+    }
+
+    public static ConnectedThread getConnectedThread(){
+        return mConnectedThread;
+    }
+
+    public static boolean isConnected(){
+        return mConnectedThread != null;
+    }
 }
