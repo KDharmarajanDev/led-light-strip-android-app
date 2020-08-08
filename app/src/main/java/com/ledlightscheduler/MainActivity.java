@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         setUpBluetooth();
 
         //Sets up Recycler View
-        setUpRecyclerView(new ArrayList<>());
+        setUpRecyclerView(FileSaverAndLoader.getLEDStrips(this));
 
         instance = this;
     }
@@ -203,5 +203,11 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Couldn't connect!", Toast.LENGTH_SHORT).show();
             connectionStatusText.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.presence_away, 0);
         }
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        FileSaverAndLoader.saveLEDStrips(getLEDStrips(), this);
     }
 }
