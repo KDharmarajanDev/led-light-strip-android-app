@@ -39,7 +39,7 @@
         android:id="@+id/AddLEDStripButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="344dp"
+        android:layout_marginStart="296dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/round_button"
         android:text="@string/PlusSymbol"
@@ -87,5 +87,15 @@
         android:background="@drawable/upload_button_background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ArduinoConnectedText" />
+
+    <Button
+        android:id="@+id/GoToConfigurationSaverButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/ic_playlist_add_black_24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ConnectionSettingsButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

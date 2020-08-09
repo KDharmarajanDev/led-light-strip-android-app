@@ -18,6 +18,7 @@
             android:name=".uimanager.CreateLEDStripPopup"
             android:theme="@style/AppTheme.OverlayTheme">
         </activity>
+        <activity android:name=".ConfigurationSaverActivity"></activity>
         <activity
             android:name=".uimanager.CreateSequentialGeneratorPopup"
             android:theme="@style/AppTheme.OverlayTheme"></activity>

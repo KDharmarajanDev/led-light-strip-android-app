@@ -24,7 +24,6 @@ import com.ledlightscheduler.uimanager.recyclerviewadapters.LEDStripDisplayAdapt
 import com.ledlightscheduler.uimanager.recyclerviewpsacer.VerticalSpaceItemDecoration;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,11 +36,14 @@ public class MainActivity extends AppCompatActivity {
     private Button addLEDStripButton;
     private Button uploadDataToArduinoButton;
     private Button downloadDataFromArduinoButton;
+    private Button goToConfigurationSaverButton;
     private RecyclerView ledStripRecyclerView;
     private LEDStripDisplayAdapter ledStripRecyclerViewAdapter;
     private RecyclerView.LayoutManager ledStripLayoutManager;
 
     private static MainActivity instance;
+
+    private static final int CONFIGURATION_SAVER_REQUEST_CODE = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
         ledStripRecyclerView = findViewById(R.id.LEDStripRecyclerView);
         uploadDataToArduinoButton = findViewById(R.id.UploadToArduinoButton);
         downloadDataFromArduinoButton = findViewById(R.id.DownloadFromArduinoButton);
+        goToConfigurationSaverButton = findViewById(R.id.GoToConfigurationSaverButton);
     }
 
     public void setUpButtons(){
@@ -113,6 +116,17 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         sendPacket(new GetInformationSerialPacket());
                         setConnectionStatus(ConnectionDebugActivity.isConnected());
+                    }
+                }
+        );
+
+        goToConfigurationSaverButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent startIntent = new Intent();
+                        startIntent.putExtra("LEDStrips", getLEDStrips());
+                        startActivityForResult(startIntent, CONFIGURATION_SAVER_REQUEST_CODE);
                     }
                 }
         );
@@ -157,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
                     SingleColorLEDStrip inputLEDStrip = data.getExtras().getParcelable("led-strip");
                     if (requestCode >= 0 && requestCode < ledStripRecyclerViewAdapter.getItemCount()) {
                         modifyLEDStrip(requestCode, inputLEDStrip);
-                    } else {
+                    } else if (requestCode >= ledStripRecyclerViewAdapter.getItemCount()){
                         addLEDStrip(inputLEDStrip);
                     }
                 }
