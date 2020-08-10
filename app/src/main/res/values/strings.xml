@@ -45,4 +45,5 @@
     <string name="red_pin">Red Pin:</string>
     <string name="green_pin">Green Pin:</string>
     <string name="blue_pin">Blue Pin:</string>
+    <string name="save_current_configuration">Save Current Configuration</string>
 </resources>
