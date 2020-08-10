@@ -1,6 +1,7 @@
 package com.ledlightscheduler;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 
 import com.ledlightscheduler.arduinopackets.packets.LEDStripsInformationPacket;
@@ -18,10 +19,10 @@ public class FileSaverAndLoader {
 
     private static final String saveFileDirectory = "LEDStripSequences";
 
-    public static void saveLEDStrips(ArrayList<SingleColorLEDStrip> ledStrips, Activity activity, String name){
-        checkIfSaveDirExisted(activity);
+    public static void saveLEDStrips(ArrayList<SingleColorLEDStrip> ledStrips, Context context, String name){
+        checkIfSaveDirExisted(context);
         try {
-            String pathName = activity.getFilesDir().getAbsolutePath() + "/" + saveFileDirectory + "/" + name + ".txt";
+            String pathName = context.getFilesDir().getAbsolutePath() + "/" + saveFileDirectory + "/" + name + ".txt";
             File newFile = new File(pathName);
             if (!newFile.createNewFile()) {
                 Log.w("[LEDLightStripScheduler]", "Couldn't create file " + name + ".txt.");
@@ -34,9 +35,9 @@ public class FileSaverAndLoader {
         }
     }
 
-    public static File[] getLEDStripFiles(Activity activity){
+    public static File[] getLEDStripFiles(Context context){
         try {
-            File directory = new File(activity.getFilesDir() + "/" + saveFileDirectory);
+            File directory = new File(context.getFilesDir() + "/" + saveFileDirectory);
             return directory.listFiles((File pathname) -> pathname.getName().endsWith(".txt"));
         } catch (Exception e){
             e.printStackTrace();
@@ -44,9 +45,9 @@ public class FileSaverAndLoader {
         return new File[0];
     }
 
-    public static ArrayList<SingleColorLEDStrip> getLEDStrips (Activity activity, String name){
-        if(checkIfSaveDirExisted(activity)){
-            File possibleFile = new File(activity.getFilesDir().getAbsolutePath() + "/" + saveFileDirectory + "/" + name + ".txt");
+    public static ArrayList<SingleColorLEDStrip> getLEDStrips (Context context, String name){
+        if(checkIfSaveDirExisted(context)){
+            File possibleFile = new File(context.getFilesDir().getAbsolutePath() + "/" + saveFileDirectory + "/" + name + ".txt");
             if(possibleFile.exists()){
                 try {
                     Scanner scanner = new Scanner(possibleFile);
@@ -62,9 +63,10 @@ public class FileSaverAndLoader {
         }
         return new ArrayList<>();
     }
+    
 
-    private static boolean checkIfSaveDirExisted(Activity activity) {
-        Path path = Paths.get(activity.getFilesDir().getAbsolutePath() + "/" + saveFileDirectory);
+    private static boolean checkIfSaveDirExisted(Context context) {
+        Path path = Paths.get(context.getFilesDir().getAbsolutePath() + "/" + saveFileDirectory);
         if (Files.notExists(path)){
             File directory = path.toFile();
             if (!directory.mkdir()) {

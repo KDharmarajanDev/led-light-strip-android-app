@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         setUpBluetooth();
 
         //Sets up Recycler View
-        setUpRecyclerView(FileSaverAndLoader.getLEDStrips(this));
+        setUpRecyclerView(FileSaverAndLoader.getLEDStrips(this, "Default"));
 
         instance = this;
     }
@@ -222,6 +222,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStop(){
         super.onStop();
-        FileSaverAndLoader.saveLEDStrips(getLEDStrips(), this);
+        FileSaverAndLoader.saveLEDStrips(getLEDStrips(), this, "Default");
     }
 }
