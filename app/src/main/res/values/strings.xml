@@ -46,4 +46,7 @@
     <string name="green_pin">Green Pin:</string>
     <string name="blue_pin">Blue Pin:</string>
     <string name="save_current_configuration">Save Current Configuration</string>
+    <string name="save_current_configuration_popup">Save Current Configuration:</string>
+    <string name="name">Name:</string>
+    <string name="insert_name_here">Insert Name Here</string>
 </resources>

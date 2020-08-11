@@ -1,9 +1,11 @@
-package com.ledlightscheduler;
+package com.ledlightscheduler.uimanager.configurationsaver;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.ledlightscheduler.R;
 
 public class ConfigurationSaverActivity extends Activity {
 

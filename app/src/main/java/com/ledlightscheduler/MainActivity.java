@@ -19,7 +19,8 @@ import com.ledlightscheduler.arduinopackets.packets.LEDStripsInformationPacket;
 import com.ledlightscheduler.arduinopackets.packets.SerialPacket;
 import com.ledlightscheduler.ledstriputilities.Scheduler;
 import com.ledlightscheduler.ledstriputilities.ledstrips.SingleColorLEDStrip;
-import com.ledlightscheduler.uimanager.CreateLEDStripPopup;
+import com.ledlightscheduler.uimanager.configurationsaver.FileSaverAndLoader;
+import com.ledlightscheduler.uimanager.createpopups.CreateLEDStripPopup;
 import com.ledlightscheduler.uimanager.recyclerviewadapters.LEDStripDisplayAdapter;
 import com.ledlightscheduler.uimanager.recyclerviewpsacer.VerticalSpaceItemDecoration;
 

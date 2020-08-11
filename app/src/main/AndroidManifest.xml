@@ -15,18 +15,21 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".uimanager.CreateLEDStripPopup"
+            android:name=".uimanager.createpopups.CreateLEDStripPopup"
             android:theme="@style/AppTheme.OverlayTheme">
         </activity>
-        <activity android:name=".ConfigurationSaverActivity"></activity>
+        <activity android:name=".uimanager.configurationsaver.ConfigurationSaverActivity"></activity>
         <activity
-            android:name=".uimanager.CreateSequentialGeneratorPopup"
+            android:name=".uimanager.configurationsaver.NameConfigurationSaverPopup"
             android:theme="@style/AppTheme.OverlayTheme"></activity>
         <activity
-            android:name=".uimanager.CreateLEDStatePopup"
+            android:name=".uimanager.createpopups.CreateSequentialGeneratorPopup"
             android:theme="@style/AppTheme.OverlayTheme"></activity>
         <activity
-            android:name=".uimanager.CreateColorPopup"
+            android:name=".uimanager.createpopups.CreateLEDStatePopup"
+            android:theme="@style/AppTheme.OverlayTheme"></activity>
+        <activity
+            android:name=".uimanager.createpopups.CreateColorPopup"
             android:theme="@style/AppTheme.OverlayTheme"></activity>
         <activity
             android:name=".MainActivity"

@@ -1,4 +1,4 @@
-package com.ledlightscheduler.uimanager;
+package com.ledlightscheduler.uimanager.createpopups;
 
 import android.app.Activity;
 import android.content.Intent;

@@ -11,6 +11,7 @@ import com.ledlightscheduler.ledstriputilities.ledstates.Color;
 import com.ledlightscheduler.ledstriputilities.ledstates.LEDState;
 import com.ledlightscheduler.ledstriputilities.ledstates.TransitionLEDState;
 import com.ledlightscheduler.ledstriputilities.ledstrips.SingleColorLEDStrip;
+import com.ledlightscheduler.uimanager.configurationsaver.FileSaverAndLoader;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

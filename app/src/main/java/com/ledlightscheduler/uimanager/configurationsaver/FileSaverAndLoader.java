@@ -1,4 +1,4 @@
-package com.ledlightscheduler;
+package com.ledlightscheduler.uimanager.configurationsaver;
 
 import android.app.Activity;
 import android.content.Context;
@@ -63,7 +63,15 @@ public class FileSaverAndLoader {
         }
         return new ArrayList<>();
     }
-    
+
+    public static void removeLEDStrips (Context context, String name) {
+        File possibleFile = new File(context.getFilesDir().getAbsolutePath() + "/" + saveFileDirectory + "/" + name + ".txt");
+        try {
+            possibleFile.delete();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     private static boolean checkIfSaveDirExisted(Context context) {
         Path path = Paths.get(context.getFilesDir().getAbsolutePath() + "/" + saveFileDirectory);
