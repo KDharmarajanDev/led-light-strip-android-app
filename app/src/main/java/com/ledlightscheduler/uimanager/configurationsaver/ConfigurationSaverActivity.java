@@ -34,8 +34,10 @@ public class ConfigurationSaverActivity extends Activity {
         setContentView(R.layout.activity_configuration_selection);
 
         Intent currIntent = getIntent();
-        if (currIntent.getExtras() != null && currIntent.getExtras().getParcelable("LEDStrips") != null) {
-            ledStrips = currIntent.getExtras().getParcelable("LEDStrips");
+        if (currIntent != null && currIntent.getExtras() != null && currIntent.getExtras().getParcelableArrayList("LEDStrips") != null) {
+            ledStrips = currIntent.getExtras().getParcelableArrayList("LEDStrips");
+        } else {
+            ledStrips = new ArrayList<>();
         }
 
         setupUIElements();

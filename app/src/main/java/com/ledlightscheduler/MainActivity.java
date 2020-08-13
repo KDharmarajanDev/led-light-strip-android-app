@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static MainActivity instance;
 
-    private static final int CONFIGURATION_SAVER_REQUEST_CODE = 1000000;
+    private static final int CONFIGURATION_SAVER_REQUEST_CODE = 10000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

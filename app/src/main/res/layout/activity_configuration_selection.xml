@@ -32,8 +32,6 @@
         android:id="@+id/ConfigurationRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="632dp"
-        android:layout_marginTop="27dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/GoBackToMainActivityButton" />
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
