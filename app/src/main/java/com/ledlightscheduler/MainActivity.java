@@ -17,8 +17,8 @@ import android.widget.Toast;
 import com.ledlightscheduler.arduinopackets.packets.GetInformationSerialPacket;
 import com.ledlightscheduler.arduinopackets.packets.LEDStripsInformationPacket;
 import com.ledlightscheduler.arduinopackets.packets.SerialPacket;
-import com.ledlightscheduler.ledstriputilities.Scheduler;
 import com.ledlightscheduler.ledstriputilities.ledstrips.SingleColorLEDStrip;
+import com.ledlightscheduler.uimanager.configurationsaver.ConfigurationSaverActivity;
 import com.ledlightscheduler.uimanager.configurationsaver.FileSaverAndLoader;
 import com.ledlightscheduler.uimanager.createpopups.CreateLEDStripPopup;
 import com.ledlightscheduler.uimanager.recyclerviewadapters.LEDStripDisplayAdapter;
@@ -63,19 +63,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setLEDStrips(ArrayList<SingleColorLEDStrip> ledStrips){
-        ArrayList<Scheduler> schedulers = new ArrayList<>();
-        for(SingleColorLEDStrip ledStrip : ledStrips){
-            schedulers.add(new Scheduler(ledStrip));
-        }
-        ledStripRecyclerViewAdapter.setSchedulers(schedulers);
+        ledStripRecyclerViewAdapter.setStrips(ledStrips);
     }
 
     public ArrayList<SingleColorLEDStrip> getLEDStrips(){
-        ArrayList<SingleColorLEDStrip> ledStrips = new ArrayList<>();
-        for(Scheduler scheduler : ledStripRecyclerViewAdapter.getSchedulers()){
-            ledStrips.add(scheduler.getLEDStrip());
-        }
-        return ledStrips;
+        return ledStripRecyclerViewAdapter.getStrips();
     }
 
     public void setUpUIElements(){
@@ -125,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent startIntent = new Intent();
+                        Intent startIntent = new Intent(MainActivity.this, ConfigurationSaverActivity.class);
                         startIntent.putExtra("LEDStrips", getLEDStrips());
                         startActivityForResult(startIntent, CONFIGURATION_SAVER_REQUEST_CODE);
                     }
@@ -144,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(int position) {
                         Intent modifyLEDStrip = new Intent(MainActivity.this, CreateLEDStripPopup.class);
-                        modifyLEDStrip.putExtra("input-led-strip", ledStripRecyclerViewAdapter.getSchedulers().get(position).getLEDStrip());
+                        modifyLEDStrip.putExtra("input-led-strip", ledStripRecyclerViewAdapter.getStrips().get(position));
                         startActivityForResult(modifyLEDStrip, position);
                     }
 
@@ -182,19 +174,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void modifyLEDStrip(int index, SingleColorLEDStrip ledStrip){
-        Scheduler scheduler = new Scheduler(ledStrip);
-        ledStripRecyclerViewAdapter.getSchedulers().set(index, scheduler);
+        ledStripRecyclerViewAdapter.getStrips().set(index, ledStrip);
         ledStripRecyclerViewAdapter.notifyItemChanged(index);
     }
 
     public void addLEDStrip(SingleColorLEDStrip ledStrip){
-        Scheduler scheduler = new Scheduler(ledStrip);
-        ledStripRecyclerViewAdapter.getSchedulers().add(scheduler);
+        ledStripRecyclerViewAdapter.getStrips().add(ledStrip);
         ledStripRecyclerViewAdapter.notifyItemChanged(ledStripRecyclerViewAdapter.getItemCount()-1);
     }
 
     public void removeLEDStrip(int removedIndex){
-        ledStripRecyclerViewAdapter.getSchedulers().remove(removedIndex);
+        ledStripRecyclerViewAdapter.getStrips().remove(removedIndex);
         ledStripRecyclerViewAdapter.notifyItemRemoved(removedIndex);
     }
 

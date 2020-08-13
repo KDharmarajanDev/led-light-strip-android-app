@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ledlightscheduler.R;
-import com.ledlightscheduler.ledstriputilities.Scheduler;
 import com.ledlightscheduler.ledstriputilities.ledstrips.SingleColorLEDStrip;
 import com.ledlightscheduler.uimanager.recyclerviewpsacer.VerticalSpaceItemDecoration;
 
@@ -22,7 +21,7 @@ import java.util.ArrayList;
 public class LEDStripDisplayAdapter extends RecyclerView.Adapter<LEDStripDisplayAdapter.LEDStripDisplayViewHolder> {
 
     private OnItemClickListener listener;
-    private ArrayList<Scheduler> schedulers;
+    private ArrayList<SingleColorLEDStrip> strips;
     private boolean shouldPassListener;
 
     public interface OnItemClickListener {
@@ -143,10 +142,7 @@ public class LEDStripDisplayAdapter extends RecyclerView.Adapter<LEDStripDisplay
     }
 
     public LEDStripDisplayAdapter(ArrayList<SingleColorLEDStrip> strips, boolean shouldPassListener){
-        schedulers = new ArrayList<>();
-        for(SingleColorLEDStrip strip : strips){
-            schedulers.add(new Scheduler(strip));
-        }
+        this.strips = strips;
         this.shouldPassListener = shouldPassListener;
     }
 
@@ -154,12 +150,12 @@ public class LEDStripDisplayAdapter extends RecyclerView.Adapter<LEDStripDisplay
         this.listener = listener;
     }
 
-    public ArrayList<Scheduler> getSchedulers(){
-        return schedulers;
+    public ArrayList<SingleColorLEDStrip> getStrips(){
+        return strips;
     }
 
-    public void setSchedulers(ArrayList<Scheduler> schedulers){
-        this.schedulers = schedulers;
+    public void setStrips(ArrayList<SingleColorLEDStrip> strips){
+        this.strips = strips;
         notifyDataSetChanged();
     }
 
@@ -173,13 +169,13 @@ public class LEDStripDisplayAdapter extends RecyclerView.Adapter<LEDStripDisplay
 
     @Override
     public void onBindViewHolder(@NonNull LEDStripDisplayViewHolder holder, int position) {
-        SingleColorLEDStrip ledStrip = schedulers.get(position).getLEDStrip();
+        SingleColorLEDStrip ledStrip = strips.get(position);
         displayLEDStrip(holder, ledStrip);
     }
 
     @Override
     public int getItemCount() {
-        return schedulers.size();
+        return strips.size();
     }
 
     public void displayLEDStrip(LEDStripDisplayViewHolder holder, SingleColorLEDStrip ledStrip){
