@@ -24,6 +24,7 @@ import com.ledlightscheduler.uimanager.createpopups.CreateLEDStripPopup;
 import com.ledlightscheduler.uimanager.recyclerviewadapters.LEDStripDisplayAdapter;
 import com.ledlightscheduler.uimanager.recyclerviewpsacer.VerticalSpaceItemDecoration;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static MainActivity instance;
 
-    private static final int CONFIGURATION_SAVER_REQUEST_CODE = -1;
+    private static final int CONFIGURATION_SAVER_REQUEST_CODE = 1000000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +168,8 @@ public class MainActivity extends AppCompatActivity {
                     } else if (requestCode >= ledStripRecyclerViewAdapter.getItemCount()){
                         addLEDStrip(inputLEDStrip);
                     }
+                } else if(requestCode == CONFIGURATION_SAVER_REQUEST_CODE && data.getStringExtra("SelectedConfigurationName") != null) {
+                    ledStripRecyclerViewAdapter.setStrips(FileSaverAndLoader.getLEDStrips(this, data.getStringExtra("SelectedConfigurationName")));
                 }
             }
         }

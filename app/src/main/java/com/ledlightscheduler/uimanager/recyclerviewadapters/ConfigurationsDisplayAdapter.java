@@ -17,12 +17,16 @@ public class ConfigurationsDisplayAdapter extends RecyclerView.Adapter<Configura
 
     private ArrayList<String> configNames;
     private OnItemClickListener listener;
-    private int selectedIndex;
 
     public interface OnItemClickListener {
         void onItemClick(int position);
         void onDeleteClick(int position);
     }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.listener = listener;
+    }
+
 
     public static class ConfigurationDisplayViewHolder extends RecyclerView.ViewHolder{
 
@@ -72,6 +76,10 @@ public class ConfigurationsDisplayAdapter extends RecyclerView.Adapter<Configura
         this.configNames = configNames;
     }
 
+    public ArrayList<String> getConfigNames() {
+        return configNames;
+    }
+
     @NonNull
     @Override
     public ConfigurationDisplayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -89,6 +97,14 @@ public class ConfigurationsDisplayAdapter extends RecyclerView.Adapter<Configura
         return configNames.size();
     }
 
+    public void addName(String name) {
+        configNames.add(name);
+        notifyItemInserted(configNames.size()-1);
+    }
 
+    public void removeName(int position) {
+        configNames.remove(position);
+        notifyItemRemoved(position);
+    }
 
 }

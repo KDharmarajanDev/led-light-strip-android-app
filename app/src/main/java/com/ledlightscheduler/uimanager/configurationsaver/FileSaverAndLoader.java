@@ -1,6 +1,5 @@
 package com.ledlightscheduler.uimanager.configurationsaver;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -13,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class FileSaverAndLoader {
@@ -35,14 +35,22 @@ public class FileSaverAndLoader {
         }
     }
 
-    public static File[] getLEDStripFiles(Context context){
+    public static ArrayList<String> getLEDStripFileNames(Context context){
         try {
             File directory = new File(context.getFilesDir() + "/" + saveFileDirectory);
-            return directory.listFiles((File pathname) -> pathname.getName().endsWith(".txt"));
+            ArrayList<String> result = new ArrayList<>();
+            Arrays.stream(directory.listFiles((File pathname) -> pathname.getName().endsWith(".txt")))
+                    .forEach(file -> {
+                        String name = file.getName().substring(0,file.getName().indexOf('.'));
+                        if(!name.equals("Default")) {
+                            result.add(name);
+                        }
+                    });
+            return result;
         } catch (Exception e){
             e.printStackTrace();
         }
-        return new File[0];
+        return new ArrayList<>();
     }
 
     public static ArrayList<SingleColorLEDStrip> getLEDStrips (Context context, String name){

@@ -13,8 +13,7 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.ledlightscheduler.R;
 
-import java.io.File;
-import java.util.Arrays;
+import java.util.ArrayList;
 
 public class NameConfigurationSaverPopup extends Activity {
 
@@ -23,7 +22,7 @@ public class NameConfigurationSaverPopup extends Activity {
     private Button saveButton;
     private TextInputEditText nameInputEditText;
 
-    private File[] files;
+    private ArrayList<String> names;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,7 +31,7 @@ public class NameConfigurationSaverPopup extends Activity {
 
         setupWindow();
 
-        files = FileSaverAndLoader.getLEDStripFiles(this);
+        names = getIntent().getStringArrayListExtra("ConfigurationNames");
 
         setupUIElements();
         setupButtons();
@@ -87,7 +86,7 @@ public class NameConfigurationSaverPopup extends Activity {
 
                     @Override
                     public void afterTextChanged(Editable s) {
-                        if(s.toString().trim().length() != 0) {
+                        if(s.toString().trim().length() == 0) {
                             nameInputEditText.setError("Configuration name is blank!");
                         } else if(isNameDuplicated(s.toString().trim())) {
                             nameInputEditText.setError("Configuration name is taken!");
@@ -100,7 +99,6 @@ public class NameConfigurationSaverPopup extends Activity {
     }
 
     private boolean isNameDuplicated(String name) {
-        return Arrays.stream(files)
-                .anyMatch(file -> file.getName().equals(name));
+        return names.stream().anyMatch(filename -> filename.equals(name));
     }
 }
