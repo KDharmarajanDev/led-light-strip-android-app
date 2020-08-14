@@ -62,7 +62,7 @@ public class NameConfigurationSaverPopup extends Activity {
     private void setupButtons() {
         cancelButton.setOnClickListener(view -> finish());
         saveButton.setOnClickListener(view -> {
-            if(nameInputEditText.getError() == null) {
+            if(nameInputEditText.getError() == null && !isNameDuplicated(nameInputEditText.getText().toString().trim())) {
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("NameOfConfiguration", nameInputEditText.getText().toString().trim());
                 setResult(RESULT_OK, resultIntent);
@@ -88,7 +88,7 @@ public class NameConfigurationSaverPopup extends Activity {
                     public void afterTextChanged(Editable s) {
                         if(s.toString().trim().length() == 0) {
                             nameInputEditText.setError("Configuration name is blank!");
-                        } else if(isNameDuplicated(s.toString().trim())) {
+                        } else if(s.toString().trim().equals("Default") || isNameDuplicated(s.toString().trim())) {
                             nameInputEditText.setError("Configuration name is taken!");
                         } else {
                             nameInputEditText.setError(null);
