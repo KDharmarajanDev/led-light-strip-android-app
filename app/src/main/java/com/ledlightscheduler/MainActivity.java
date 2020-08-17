@@ -23,8 +23,8 @@ import com.ledlightscheduler.uimanager.configurationsaver.FileSaverAndLoader;
 import com.ledlightscheduler.uimanager.createpopups.CreateLEDStripPopup;
 import com.ledlightscheduler.uimanager.recyclerviewadapters.LEDStripDisplayAdapter;
 import com.ledlightscheduler.uimanager.recyclerviewpsacer.VerticalSpaceItemDecoration;
+import com.ledlightscheduler.uimanager.simulation.SimulationActivity;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private Button uploadDataToArduinoButton;
     private Button downloadDataFromArduinoButton;
     private Button goToConfigurationSaverButton;
+    private Button goToSimulationButton;
     private RecyclerView ledStripRecyclerView;
     private LEDStripDisplayAdapter ledStripRecyclerViewAdapter;
     private RecyclerView.LayoutManager ledStripLayoutManager;
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         uploadDataToArduinoButton = findViewById(R.id.UploadToArduinoButton);
         downloadDataFromArduinoButton = findViewById(R.id.DownloadFromArduinoButton);
         goToConfigurationSaverButton = findViewById(R.id.GoToConfigurationSaverButton);
+        goToSimulationButton = findViewById(R.id.SimulateLEDStripsButton);
     }
 
     public void setUpButtons(){
@@ -124,6 +126,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+        
+        goToSimulationButton.setOnClickListener(view -> {
+            Intent startIntent = new Intent(MainActivity.this, SimulationActivity.class);
+            startIntent.putExtra("LEDStrips", getLEDStrips());
+            startActivity(startIntent);
+        });
     }
 
     public void setUpRecyclerView(ArrayList<SingleColorLEDStrip> ledStrips){
