@@ -17,8 +17,9 @@ public class RandomGenerator extends SequentialGenerator {
         super(states, startTime);
     }
 
+    @Override
     public LEDState getNextState(){
-        int desiredIndex = (int) (Math.random() * (super.getEndStateIndex()+1));
+        int desiredIndex = (int) (Math.random() * (super.getEndStateIndex()));
         super.setStartTime(System.currentTimeMillis());
         super.setCurrentStateIndex(desiredIndex);
         return super.getState(desiredIndex);
