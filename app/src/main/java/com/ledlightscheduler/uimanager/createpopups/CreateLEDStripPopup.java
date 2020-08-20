@@ -85,6 +85,10 @@ public class CreateLEDStripPopup extends Activity {
         saveLEDStripButton = findViewById(R.id.SaveLEDStripButton);
         cancelLEDStripButton = findViewById(R.id.CancelLEDStripButton);
 
+        redPinEditText.setText(String.valueOf(ledStrip.getRedPin()));
+        greenPinEditText.setText(String.valueOf(ledStrip.getGreenPin()));
+        bluePinEditText.setText(String.valueOf(ledStrip.getBluePin()));
+
         sequentialGeneratorRecyclerView = findViewById(R.id.CreateLEDStripSequentialGeneratorRecyclerView);
         sequentialGeneratorDisplayAdapter = new SequentialGeneratorDisplayAdapter(ledStrip, true, true);
         sequentialGeneratorRecyclerViewLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
