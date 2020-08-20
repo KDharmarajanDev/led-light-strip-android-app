@@ -93,4 +93,9 @@ public class Color implements Parcelable {
         }
         return false;
     }
+
+    @Override
+    public String toString(){
+        return "[" + getRed() + "," + getGreen() + "," + getBlue() + "]";
+    }
 }

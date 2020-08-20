@@ -16,14 +16,15 @@ public class TransitionLEDState extends LEDState implements Parcelable {
         computeChangeColor();
     }
 
+    @Override
     public Color getColor(long currentTime){
         if(currentTime < 0){
             currentTime = 0;
         }
         double multiplierRatio = ((double) currentTime)/super.getDuration();
         currentColor = new Color((int) (super.getColor().getRed() + multiplierRatio * changeColor.getRed())
-                , (int) (super.getColor().getRed() + multiplierRatio * changeColor.getRed())
-                , (int) (super.getColor().getRed() + multiplierRatio * changeColor.getRed()));
+                , (int) (super.getColor().getGreen() + multiplierRatio * changeColor.getGreen())
+                , (int) (super.getColor().getBlue() + multiplierRatio * changeColor.getBlue()));
         return currentColor;
     }
 
