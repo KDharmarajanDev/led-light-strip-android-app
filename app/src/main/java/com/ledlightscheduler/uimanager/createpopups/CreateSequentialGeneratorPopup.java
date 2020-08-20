@@ -68,6 +68,12 @@ public class CreateSequentialGeneratorPopup extends Activity {
             generator = new SequentialGenerator(new ArrayList<>());
         }
 
+        if(generator instanceof RandomGenerator) {
+            randomGeneratorCheckBox.setChecked(true);
+        } else {
+            randomGeneratorCheckBox.setChecked(false);
+        }
+
         //Sets up RecyclerView
         ledStateDisplayViewAdapter = new LEDStateDisplayAdapter(generator, true);
         ledStateDisplayLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);

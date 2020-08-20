@@ -1,9 +1,5 @@
 package com.ledlightscheduler.uimanager.simulation;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
-import android.graphics.drawable.GradientDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +46,7 @@ public class SimulationRecyclerViewAdapter extends RecyclerView.Adapter<Simulati
                     Color tempColor = scheduler.update();
                     if(!tempColor.equals(currentColor)) {
                         try {
-                            java.lang.Thread.sleep(10);
+                            java.lang.Thread.sleep(20);
                             action.apply(tempColor.toAndroidColor(), simulationColorView);
                         } catch (Exception e){
                             e.printStackTrace();
@@ -58,7 +54,6 @@ public class SimulationRecyclerViewAdapter extends RecyclerView.Adapter<Simulati
                         currentColor = tempColor;
                     }
                 }
-                Log.i("Test","Test");
             };
             schedulerThread = new Thread(runnable);
             schedulerThread.start();
