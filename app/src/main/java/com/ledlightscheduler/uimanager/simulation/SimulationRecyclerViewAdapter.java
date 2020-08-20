@@ -1,7 +1,8 @@
 package com.ledlightscheduler.uimanager.simulation;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,11 @@ public class SimulationRecyclerViewAdapter extends RecyclerView.Adapter<Simulati
 
     private ArrayList<Scheduler> schedulers;
     private ArrayList<Runnable> stopCommands;
-    private Handler handler;
+    private SimulationAction action;
+
+    public interface SimulationAction {
+        void apply(int color, ImageView background);
+    }
 
     public static class SimulationViewHolder extends RecyclerView.ViewHolder{
 
@@ -38,20 +43,22 @@ public class SimulationRecyclerViewAdapter extends RecyclerView.Adapter<Simulati
             simulationColorView = itemView.findViewById(R.id.SimulationColorImageView);
         }
 
-        public void setupScheduler(Scheduler scheduler, Handler handler) {
+        public void setupScheduler(Scheduler scheduler, SimulationAction action) {
             Runnable runnable = () -> {
                 Color currentColor = scheduler.update();
                 while(!Thread.currentThread().isInterrupted()){
                     Color tempColor = scheduler.update();
                     if(!tempColor.equals(currentColor)) {
-                        handler.post(() -> {
-                            GradientDrawable drawable = (GradientDrawable) simulationColorView.getBackground().mutate();
-                            drawable.setColor(tempColor.toAndroidColor());
-                        });
+                        try {
+                            java.lang.Thread.sleep(10);
+                            action.apply(tempColor.toAndroidColor(), simulationColorView);
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
                         currentColor = tempColor;
                     }
-                    Log.v("Test", "Running!");
                 }
+                Log.i("Test","Test");
             };
             schedulerThread = new Thread(runnable);
             schedulerThread.start();
@@ -65,13 +72,13 @@ public class SimulationRecyclerViewAdapter extends RecyclerView.Adapter<Simulati
 
     }
 
-    public SimulationRecyclerViewAdapter(ArrayList<SingleColorLEDStrip> strips){
+    public SimulationRecyclerViewAdapter(ArrayList<SingleColorLEDStrip> strips, SimulationAction action){
         schedulers = new ArrayList<>();
         stopCommands = new ArrayList<>();
         for (SingleColorLEDStrip strip : strips) {
             schedulers.add(new Scheduler(strip));
         }
-        handler = new Handler();
+        this.action = action;
     }
 
     @NonNull
@@ -83,7 +90,7 @@ public class SimulationRecyclerViewAdapter extends RecyclerView.Adapter<Simulati
 
     @Override
     public void onBindViewHolder(@NonNull SimulationViewHolder holder, int position) {
-        holder.setupScheduler(schedulers.get(position), handler);
+        holder.setupScheduler(schedulers.get(position), action);
         stopCommands.add(holder::stopScheduler);
     }
 
