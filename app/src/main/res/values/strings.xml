@@ -49,4 +49,5 @@
     <string name="save_current_configuration_popup">Save Current Configuration:</string>
     <string name="name">Name:</string>
     <string name="insert_name_here">Insert Name Here</string>
+    <string name="simulation">Simulation</string>
 </resources>

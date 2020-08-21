@@ -13,7 +13,7 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:gravity="center_horizontal|center_vertical"
-        android:text="@string/save_current_configuration_popup"
+        android:text="@string/simulation"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
