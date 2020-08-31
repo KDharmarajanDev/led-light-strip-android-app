@@ -58,5 +58,11 @@ On the starting screen of Android Studio, open this project. Connect the control
   <img src="https://user-images.githubusercontent.com/52500655/90323046-a8a3cf80-df10-11ea-9b54-90b3a50883a6.png" width="25%" height="25%">
 </div>
 
+### Simulation
+
+1. Click the light bulb on the main screen in the middle.
+
+2. The simulation should automatically begin. To stop the simulation just back out.
+
 ## License
 This project uses the MIT License.
