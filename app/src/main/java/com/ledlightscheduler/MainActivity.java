@@ -2,6 +2,9 @@ package com.ledlightscheduler;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private Button downloadDataFromArduinoButton;
     private Button goToConfigurationSaverButton;
     private Button goToSimulationButton;
+    private Button copyMessageButton;
     private RecyclerView ledStripRecyclerView;
     private LEDStripDisplayAdapter ledStripRecyclerViewAdapter;
     private RecyclerView.LayoutManager ledStripLayoutManager;
@@ -81,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         downloadDataFromArduinoButton = findViewById(R.id.DownloadFromArduinoButton);
         goToConfigurationSaverButton = findViewById(R.id.GoToConfigurationSaverButton);
         goToSimulationButton = findViewById(R.id.SimulateLEDStripsButton);
+        copyMessageButton = findViewById(R.id.CopyMessageButton);
     }
 
     public void setUpButtons(){
@@ -131,6 +136,10 @@ public class MainActivity extends AppCompatActivity {
             Intent startIntent = new Intent(MainActivity.this, SimulationActivity.class);
             startIntent.putExtra("LEDStrips", getLEDStrips());
             startActivity(startIntent);
+        });
+
+        copyMessageButton.setOnClickListener(view ->{
+            copySerializedCode();
         });
     }
 
@@ -225,5 +234,12 @@ public class MainActivity extends AppCompatActivity {
     public void onStop(){
         super.onStop();
         FileSaverAndLoader.saveLEDStrips(getLEDStrips(), this, "Default");
+    }
+
+    public void copySerializedCode(){
+        ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Bluetooth Message", new LEDStripsInformationPacket(getLEDStrips()).serialize());
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(this, "Copied Creation Message!", Toast.LENGTH_SHORT).show();
     }
 }
